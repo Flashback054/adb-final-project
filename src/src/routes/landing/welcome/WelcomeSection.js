@@ -62,7 +62,7 @@ const WelcomeSection = () => {
           Welcome to <span>Sushi Time</span> restaurant
         </h2>
         <p>
-          Welcome to Sushi Time Restaurant! Founded in 1982, we take sushi to
+          Welcome to Sushi Time Restaurant! Founded in 2010, we take sushi to
           the next level with every bite, offering a unique and exceptional
           experience! With a distinctive brand and a passion for Japanese
           cuisine, we understand what our customers crave and turn those desires

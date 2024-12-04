@@ -389,6 +389,10 @@ function App() {
         return setAllProducts(separateCategories[category]);
       }
       if (category === "Menu") {
+        console.log(
+          "menu",
+          allProductsData.map((item) => item.ItemName)
+        );
         return setAllProducts(allProductsData);
       }
     });

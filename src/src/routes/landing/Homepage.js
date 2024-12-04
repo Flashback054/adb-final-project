@@ -16,7 +16,7 @@ import ContactLanding from "./contact-info/ContactLanding";
 
 const Homepage = () => {
   useEffect(() => {
-    document.title = "Pizza Time";
+    document.title = "Sushi Time";
     ResetLocation();
   }, []);
   return (
@@ -25,7 +25,6 @@ const Homepage = () => {
       <WelcomeSection />
       <ContactUsLanding />
       <OurServices />
-      {/* <PizzaMenuPreview /> */}
       <SushiMenuPreview />
       <MenuPricingPreview />
       <Gallery />

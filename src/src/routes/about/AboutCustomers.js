@@ -14,16 +14,25 @@ const AboutCustomers = () => {
       </div>
       <section className="about__customers__content">
         <h2 className="sub-title">Happy Customers</h2>
-        <h3>Over 16000 positive feedback</h3>
+        <h3>Over 1600 positive feedback</h3>
         <p>
-          We believe that our success is due to our commitment to providing high-quality food and exceptional service. Our menu features a wide range of delicious pizzas, salads, sandwiches, pasta dishes, and more, all made with fresh, locally sourced ingredients. We take great care to ensure that each dish is prepared with the utmost attention to detail, so that every bite is as delicious as the last.
-          We also understand that great food is only part of the equation. That's why we place a strong emphasis on delivering exceptional service to every customer who walks through our doors. Our team of dedicated staff members is committed to providing a warm, welcoming atmosphere that makes every guest feel like they are part of the family.
+          We believe that our success stems from our dedication to providing
+          high-quality sushi and exceptional service. Our menu features a wide
+          range of exquisite sushi rolls, sashimi, nigiri, and traditional
+          Japanese dishes, all made with the freshest, locally sourced seafood
+          and ingredients. We take great care to ensure that each dish is
+          crafted with precision and attention to detail, so every bite is as
+          memorable as the last. We also understand that great food is only part
+          of the experience. That's why we emphasize delivering exceptional
+          service to every customer who walks through our doors. Our team of
+          skilled chefs and dedicated staff members is committed to providing a
+          warm, welcoming atmosphere that makes every guest feel like they are
+          part of our sushi family.
         </p>
       </section>
       <div className="img-glass"></div>
     </article>
   );
-}
-
+};
 
 export default AboutCustomers;
