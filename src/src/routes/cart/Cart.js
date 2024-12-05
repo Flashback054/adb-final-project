@@ -4,17 +4,19 @@ import { motion } from "framer-motion";
 
 import ScrollBtn from "../../helpers/ScrollBtn";
 import EmptyCart from "./EmptyCart";
-import './cart.css'
+import "./cart.css";
 const Cart = ({ cartItems, CartItem }) => {
   useEffect(() => {
-    document.title = "Shopping Cart | Pizza Time";
+    document.title = "Shopping Cart | Sushi Time";
   }, []);
   return (
-    <motion.main className="cart"
+    <motion.main
+      className="cart"
       initial={{ opacity: 0, translateX: -300 }}
       whileInView={{ opacity: 1, translateX: 0 }}
       exit={{ opacity: 0, translateX: -300 }}
-      transition={{ duration: 1 }}>
+      transition={{ duration: 1 }}
+    >
       <h2>Shopping cart</h2>
       <article className="cart__items">
         {cartItems.length === 0 ? <EmptyCart /> : CartItem}
@@ -22,6 +24,6 @@ const Cart = ({ cartItems, CartItem }) => {
       <ScrollBtn />
     </motion.main>
   );
-}
+};
 
 export default Cart;

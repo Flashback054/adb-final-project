@@ -14,7 +14,7 @@ import {
   Register,
   SingleItem,
 } from "./routes/index";
-import { allProductsData } from "./data/AllProductsData.js";
+import { allProductsData as allProductsDataF } from "./data/AllProductsData.js";
 import { AllCategories } from "./data/AllCategories.js";
 // import CheckoutSummary from './routes/checkout/CheckoutSummary.js';
 import CartTotals from "./routes/cart/CartTotals.js";
@@ -42,6 +42,7 @@ function App() {
   const [isModalActive, setIsModalActive] = useState(false);
   const [loginModalWindow, setLoginModalWindow] = useState(false);
   const [currentUser, setCurrentUser] = useState({});
+  const [allProductsData, setAllProductsData] = useState(allProductsDataF);
 
   // Wrapping WebSocket creation to log usage
   const OriginalWebSocket = WebSocket;
@@ -92,6 +93,13 @@ function App() {
   };
 
   useEffect(() => {
+    // Mocking user data
+    const currentUser = {
+      id: 1,
+      name: "John Doe",
+      role: "user",
+    };
+    sessionStorage.setItem("currentUser", JSON.stringify(currentUser));
     if (sessionStorage.getItem("currentUser") !== null) {
       const user = JSON.parse(sessionStorage.getItem("currentUser"));
       setCurrentUser(user);
@@ -326,6 +334,25 @@ function App() {
     }
   };
 
+  const handleAddNewProduct = (newProduct) => {
+    changeCategory(newProduct.Category);
+    const updatedProductList = [...allProductsData, newProduct];
+    setAllProductsData(updatedProductList);
+  };
+
+  const handleUpdateProductStatus = (productId, newStatus) => {
+    setAllProducts((prevProducts) =>
+      prevProducts.map((product) =>
+        product.id === productId
+          ? {
+              ...product,
+              isStock: newStatus,
+            }
+          : product
+      )
+    );
+  };
+
   const clearCart = () => {
     setCartItems([]);
     setProductsQuantity(0);
@@ -389,10 +416,6 @@ function App() {
         return setAllProducts(separateCategories[category]);
       }
       if (category === "Menu") {
-        console.log(
-          "menu",
-          allProductsData.map((item) => item.ItemName)
-        );
         return setAllProducts(allProductsData);
       }
     });
@@ -477,6 +500,8 @@ function App() {
               handleAddProduct={handleAddProduct}
               handleRemoveProduct={handleRemoveProduct}
               activeCategory={activeCategory}
+              handleAddNewProduct={handleAddNewProduct}
+              handleUpdateProductStatus={handleUpdateProductStatus}
             />
           }
         />

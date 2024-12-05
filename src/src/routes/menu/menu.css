@@ -1,3 +1,149 @@
+.modal-add-product.active-add-product-modal {
+  display: inline-block;
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  min-height: 100vh;
+  background-color: var(--modal-glass-bg);
+  backdrop-filter: blur(5px);
+  z-index: 999;
+}
+.modal-add-product {
+  display: none;
+}
+
+.modal__add_product__inner {
+  position: static;
+  border-radius: 15px;
+  background-color: var(--white);
+  backdrop-filter: blur(5px);
+  box-shadow: var(--modal-box-shadow);
+  -webkit-box-shadow: var(--modal-box-shadow);
+  -moz-box-shadow: var(--modal-box-shadow);
+  width: 90%;
+  -webkit-align-self: center;
+  align-self: center;
+  margin: 0 auto;
+  margin-top: 2%;
+  min-width: max-content;
+  max-width: 600px;
+}
+
+.modal__add__product__content {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
+  margin: 0 auto;
+  width: 90%;
+  padding: 3rem 1rem;
+}
+
+.display-none {
+  display: none;
+}
+
+.modal__add__product__inner__close {
+  cursor: pointer;
+  border: 1px solid transparent;
+  background-color: transparent;
+  color: var(--light-black);
+  font-size: 2rem;
+  text-align: right;
+  padding: 1rem;
+  width: max-content;
+  position: absolute;
+  right: 0;
+  cursor: pointer;
+  z-index: 99999;
+}
+
+.modal__add__product__content h2 {
+  color: var(--pizza-red);
+  font-family: var(--poppins-font);
+  letter-spacing: 1px;
+  font-weight: 400;
+}
+
+.modal__add__product__content form {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+  width: 100%;
+}
+
+.modal__add__product__content input {
+  width: 90%;
+  background-color: transparent;
+  border: 1px solid transparent;
+  border: 1px solid var(--light-black);
+  padding: 1rem;
+  border-radius: 10px;
+  transition: border 0.3s ease;
+}
+.modal__add__product__content select {
+  width: 50%;
+  background-color: transparent;
+  border: 1px solid transparent;
+  border: 1px solid var(--light-black);
+  padding: 1rem;
+  border-radius: 10px;
+}
+
+.modal__add__product__content input:hover,
+.modal__add__product__content select:hover {
+  border-color: var(--green);
+}
+
+.modal__add__product__content input:focus,
+.modal__add__product__content select:focus {
+  outline: none;
+  border-color: var(--green);
+  box-shadow: 0 0 5px var(--green);
+}
+
+.modal__add__product__content select:focus-visible {
+  outline: none;
+}
+
+.modal__add__product__content input:focus-visible {
+  outline: none;
+}
+
+.modal__add__product__content input::placeholder {
+  color: var(--light-black);
+  text-transform: capitalize;
+  font-family: var(--poppins-font);
+  font-weight: 400;
+  font-size: 1rem;
+}
+
+.modal__buttons {
+  display: flex;
+  flex-direction: row;
+  gap: 1rem;
+  justify-content: center;
+  width: 100%;
+  margin-top: 1rem;
+}
+
+.modal__buttons button {
+  padding: 0.8rem 2rem;
+  background-color: var(--pizza-red);
+  color: var(--white);
+  border: none;
+  border-radius: 8px;
+  font-size: 1.2rem;
+  cursor: pointer;
+  transition: background-color 0.3 ease;
+}
+
+.modal__buttons button:hover {
+  background-color: var(--yellow);
+}
+
 li {
   list-style: none;
 }
@@ -15,6 +161,7 @@ li {
   padding-bottom: 4rem;
   max-width: 1440px;
   margin: 0 auto;
+  position: relative;
 }
 .menu__categories h1 {
   font-family: var(--josefin-font);
@@ -30,6 +177,14 @@ li {
   align-items: center;
   overflow-x: auto;
   scroll-behavior: smooth;
+}
+
+.floating-add-new-product {
+  background-color: var(--pizza-red);
+  position: fixed;
+  right: 10px;
+  bottom: 100px;
+  opacity: 1;
 }
 
 input[type="search"]::-webkit-search-decoration,
@@ -235,6 +390,21 @@ input[type="search"]::-webkit-search-results-decoration {
 .menu__not-found {
   color: var(--white);
   margin-top: 3rem;
+}
+
+.stock-status {
+  font-size: 1.2rem;
+  text-align: center;
+  font-weight: 400;
+  padding: 0.5rem;
+  align-items: center;
+}
+.stock-status.in-stock {
+  background-color: var(--green);
+}
+.stock-status.out-of-stock {
+  opacity: 0.8;
+  background-color: var(--pizza-red);
 }
 
 @media (hover: hover) {

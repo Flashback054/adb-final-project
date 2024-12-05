@@ -2,25 +2,40 @@ import React from "react";
 import MenuCategories from "./MenuCategories";
 import ScrollButton from "../../helpers/ScrollBtn";
 import MenuGridItem from "./MenuGridItem";
-import ReactPaginate from 'react-paginate';
+import ReactPaginate from "react-paginate";
 import { useState, useEffect } from "react";
 import ResetLocation from "../../helpers/ResetLocation";
 import { motion } from "framer-motion";
-import './menu.css'
+import "./menu.css";
+import AddNewProductModal from "./AddNewProductModal";
 
-const Menu = ({ allProducts,
+const Menu = ({
+  allProducts,
   activeCategory,
   allCategories,
   changeCategory,
   handleAddProduct,
   handleRemoveProduct,
-  findMenuItem
+  findMenuItem,
+  handleAddNewProduct,
+  handleUpdateProductStatus,
 }) => {
-
   const [itemOffset, setItemOffset] = useState(0);
   const [endOffset, setEndOffset] = useState(itemOffset + 5);
-  const [currentProducts, setcurrentProducts] = useState([...allProducts].reverse().slice(itemOffset, endOffset));
-  const [pageCountProducts, setpageCountProducts] = useState(Math.ceil(allProducts.length / 5));
+  const [currentProducts, setcurrentProducts] = useState(
+    [...allProducts].reverse().slice(itemOffset, endOffset)
+  );
+  const [pageCountProducts, setpageCountProducts] = useState(
+    Math.ceil(allProducts.length / 5)
+  );
+  const [addNewProductModalWindow, setAddNewProductModalWindow] =
+    useState(false);
+  const userRole = JSON.parse(sessionStorage.getItem("currentUser")).role;
+  console.log(userRole);
+
+  const activateAddNewProductModal = () => {
+    setAddNewProductModalWindow(!addNewProductModalWindow);
+  };
 
   const handlePageClick = (event) => {
     const newOffset = (event.selected * 5) % allProducts.length;
@@ -30,13 +45,12 @@ const Menu = ({ allProducts,
   const resetPagination = () => {
     setItemOffset(0);
     setEndOffset(5);
-  }
+  };
   useEffect(() => {
     document.title = `${activeCategory} | Pizza Time`;
     setEndOffset(itemOffset + 5);
     setcurrentProducts([...allProducts].reverse().slice(itemOffset, endOffset));
     setpageCountProducts(Math.ceil(allProducts.length / 5));
-
   }, [allProducts, setEndOffset, endOffset, itemOffset, activeCategory]);
   return (
     <motion.main
@@ -53,20 +67,41 @@ const Menu = ({ allProducts,
         resetPagination={resetPagination}
         findMenuItem={findMenuItem}
       />
-        <article className="menu__items">
-        {currentProducts.length === 0 ?  <p className="menu__not-found">No results found...</p> :
+      <article className="menu__items">
+        {currentProducts.length === 0 ? (
+          <p className="menu__not-found">No results found...</p>
+        ) : (
           currentProducts.map((singleProduct) => (
             <MenuGridItem
               key={singleProduct.id}
               singleProduct={singleProduct}
               handleAddProduct={handleAddProduct}
               handleRemoveProduct={handleRemoveProduct}
+              handleUpdateProductStatus={handleUpdateProductStatus}
             />
           ))
-          }
-          <ScrollButton />
-        </article> 
+        )}
+        <ScrollButton />
 
+        {userRole === "admin" && (
+          <AddNewProductModal
+            addNewProductModalWindow={addNewProductModalWindow}
+            setAddNewProductModalWindow={setAddNewProductModalWindow}
+            handleAddNewProduct={handleAddNewProduct}
+          />
+        )}
+        {userRole === "admin" && (
+          <button
+            onClick={() => {
+              ResetLocation();
+              activateAddNewProductModal();
+            }}
+            className="passive-button-style floating-add-new-product"
+          >
+            +
+          </button>
+        )}
+      </article>
       <ReactPaginate
         className="pagination"
         breakLabel="..."
@@ -79,7 +114,6 @@ const Menu = ({ allProducts,
       />
     </motion.main>
   );
-}
-
+};
 
 export default Menu;
