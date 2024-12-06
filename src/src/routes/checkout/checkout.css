@@ -218,3 +218,173 @@ input[type="password"] {
     justify-content: space-between;
   }
 }
+/* Admin Information Form */
+.checkout__form-admin {
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
+  width: 90%;
+}
+
+.checkout__form-admin label {
+  display: block;
+  font-size: 1rem;
+  font-weight: 500;
+  color: var(--light-gray);
+}
+.checkout__form-admin select {
+  display: block;
+  width: 50%;
+  padding: 1rem;
+  margin-top: 5px;
+  border: 1px solid var(--light-gray);
+  border-radius: 4px;
+  box-sizing: border-box;
+  background-color: transparent;
+  color: var(--whitish-gray);
+}
+.checkout__form-admin option {
+  color: var(--whitish-gray);
+}
+.checkout__form-admin input {
+  padding: 1rem;
+  font-size: 1rem;
+  border: 1px solid var(--light-gray);
+  background-color: transparent;
+  color: var(--whitish-gray);
+}
+
+.checkout__form-admin .checkout__form__error {
+  color: var(--pizza-red);
+}
+
+.checkout__form-admin button {
+  padding: 1rem;
+  background-color: var(--pizza-red);
+  color: var(--white);
+  border: none;
+  cursor: pointer;
+  font-size: 1.2rem;
+  font-weight: 600;
+  margin-top: 1rem;
+}
+
+.checkout__form-admin button:hover {
+  background-color: var(--yellow);
+}
+
+/* User Information (Normal User) */
+.checkout__form-user {
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
+}
+
+.checkout__form-user p {
+  font-size: 1.2rem;
+  color: var(--whitish-gray);
+}
+
+.checkout__form-user .checkout__form__error {
+  color: var(--pizza-red);
+}
+
+.checkout__form-user .checkout__form__address,
+.checkout__form-user .checkout__form__number {
+  display: flex;
+  flex-direction: row;
+  gap: 1rem;
+  align-items: center;
+}
+
+.checkout__form-user .checkout__form__address a,
+.checkout__form-user .checkout__form__number a {
+  font-size: 1rem;
+  color: rgb(103, 15, 186);
+}
+
+.checkout__form-user .checkout__form__address span,
+.checkout__form-user .checkout__form__number span {
+  font-size: 1rem;
+}
+
+/* Error Messages Styling */
+.checkout__form__error {
+  font-family: var(--poppins-font);
+  font-size: 0.9rem;
+  color: var(--pizza-red);
+  padding-top: 0.5rem;
+}
+
+/* Promo Code */
+.checkout__form-promo-code input {
+  padding: 1rem;
+  font-size: 1rem;
+  border: 1px solid var(--light-gray);
+  background-color: transparent;
+  color: var(--whitish-gray);
+  width: 50%;
+  margin-top: 1rem;
+}
+
+.checkout__form-promo-code p {
+  font-size: 1rem;
+  cursor: pointer;
+  color: rgb(103, 15, 186);
+}
+
+.checkout__form-promo-code p:hover {
+  color: var(--yellow);
+}
+
+/* Cart Total Section */
+.checkout__totals {
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
+  margin-top: 2rem;
+}
+
+.checkout__totals__content {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  font-size: 1rem;
+  color: var(--whitish-gray);
+}
+
+.checkout__totals__content h4 {
+  font-weight: 400;
+}
+
+.checkout__totals__content p {
+  font-weight: 600;
+  color: var(--yellow);
+}
+
+.checkout__totals__content h4,
+.checkout__totals__content p {
+  width: 100%;
+}
+
+/* Responsive Layout */
+@media screen and (min-width: 700px) {
+  .checkout__inner {
+    padding: 2rem;
+  }
+
+  .checkout__totals__content {
+    flex-direction: row;
+  }
+
+  .checkout__form-admin input,
+  .checkout__form-user input {
+    width: 100%;
+  }
+  .checkout__form-admin select {
+    width: 50%;
+  }
+  .checkout__form-admin button {
+    width: 100%;
+  }
+}

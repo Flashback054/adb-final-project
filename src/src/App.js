@@ -13,6 +13,7 @@ import {
   Payment,
   Register,
   SingleItem,
+  TableOrder,
 } from "./routes/index";
 import { allProductsData as allProductsDataF } from "./data/AllProductsData.js";
 import { AllCategories } from "./data/AllCategories.js";
@@ -96,8 +97,11 @@ function App() {
     // Mocking user data
     const currentUser = {
       id: 1,
-      name: "John Doe",
-      role: "user",
+      fullname: "John Doe",
+      email: "deptraicogisai@gmail.com",
+      role: "admin",
+      address: "1234 Main St",
+      number: "123-456-7890",
     };
     sessionStorage.setItem("currentUser", JSON.stringify(currentUser));
     if (sessionStorage.getItem("currentUser") !== null) {
@@ -572,6 +576,7 @@ function App() {
             />
           }
         />
+        <Route path="/table-order" element={<TableOrder />} />
         <Route path="/careers" element={<Careers />} />
         <Route path="*" element={<NotFound />} />
         <Route path="/refunds" element={<Refunds />} />
