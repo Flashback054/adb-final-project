@@ -7,6 +7,15 @@
   margin: 0 auto;
   background-color: var(--light-black);
 }
+.type-of-order {
+  border-bottom: 1px solid var(--whitish-gray);
+}
+.table-order__form-group.type-of-order .order__form__type {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  gap: 0.5rem;
+}
 
 .table-order__title {
   color: var(--white);
@@ -42,12 +51,18 @@
   display: block;
 }
 
-.table-order input {
+.table-order input,
+.table-order select {
   border: 1px solid #fac56425;
   background-color: transparent;
   padding: 1rem;
   border-radius: 10px;
   color: white;
+  font-size: 1rem;
+}
+
+.table-order select {
+  background-color: var(--light-black);
   font-size: 1rem;
 }
 .table-order input[type="number"]::-webkit-outer-spin-button,

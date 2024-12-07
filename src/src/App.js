@@ -96,13 +96,17 @@ function App() {
   useEffect(() => {
     // Mocking user data
     const currentUser = {
-      id: 1,
-      fullname: "John Doe",
-      email: "deptraicogisai@gmail.com",
-      role: "admin",
-      address: "1234 Main St",
-      number: "123-456-7890",
+      MaTaiKhoan: 1,
+      TenDangNhap: "user123",
+      MatKhau: "hashedPassword123",
+      LoaiTaiKhoan: "KH",
+      MaNguoiDung: 1,
+      Hoten: "Nguyễn Văn A",
+      SDT: "0123456789",
+      Email: "nguyenvanA@gmail.com",
+      Diachi: "123 Đường ABC, Quận XYZ, TP HCM",
     };
+
     sessionStorage.setItem("currentUser", JSON.stringify(currentUser));
     if (sessionStorage.getItem("currentUser") !== null) {
       const user = JSON.parse(sessionStorage.getItem("currentUser"));
@@ -576,7 +580,35 @@ function App() {
             />
           }
         />
-        <Route path="/table-order" element={<TableOrder />} />
+        <Route
+          path="/table-order"
+          element={
+            <TableOrder
+              currentUser={currentUser}
+              cartItems={cartItems}
+              CartItem={
+                <CartItem
+                  clearCart={clearCart}
+                  cartItems={cartItems}
+                  handleAddProduct={handleAddProduct}
+                  handleRemoveProduct={handleRemoveProduct}
+                  cartTotals={
+                    <CartTotals
+                      className="cart-totals"
+                      totalPayment={totalPayment}
+                      productsQuantity={productsQuantity}
+                      taxes={taxes}
+                      validLogin={validLogin}
+                      showModal={showModal}
+                      isModalActive={isModalActive}
+                      activateLoginModal={activateLoginModal}
+                    />
+                  }
+                />
+              }
+            />
+          }
+        />
         <Route path="/careers" element={<Careers />} />
         <Route path="*" element={<NotFound />} />
         <Route path="/refunds" element={<Refunds />} />
