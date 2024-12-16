@@ -30,8 +30,10 @@ const Menu = ({
   );
   const [addNewProductModalWindow, setAddNewProductModalWindow] =
     useState(false);
-  const userRole = JSON.parse(sessionStorage.getItem("currentUser")).role;
-  console.log(userRole);
+  const userRole = JSON.parse(
+    sessionStorage.getItem("currentUser")
+  ).LoaiTaiKhoan;
+  console.log("userRole" + userRole);
 
   const activateAddNewProductModal = () => {
     setAddNewProductModalWindow(!addNewProductModalWindow);
@@ -83,14 +85,14 @@ const Menu = ({
         )}
         <ScrollButton />
 
-        {userRole === "admin" && (
+        {userRole === "NV" && (
           <AddNewProductModal
             addNewProductModalWindow={addNewProductModalWindow}
             setAddNewProductModalWindow={setAddNewProductModalWindow}
             handleAddNewProduct={handleAddNewProduct}
           />
         )}
-        {userRole === "admin" && (
+        {userRole === "NV" && (
           <button
             onClick={() => {
               ResetLocation();

@@ -14,7 +14,9 @@ const MenuGridItem = ({
   const [targetAttribute, setTargetAttribute] = useState("");
 
   const isStock = singleProduct.isStock;
-  const userRole = JSON.parse(sessionStorage.getItem("currentUser")).role;
+  const userRole = JSON.parse(
+    sessionStorage.getItem("currentUser")
+  ).LoaiTaiKhoan;
 
   const handleToggleStock = () => {
     const updatedStock = !singleProduct.isStock;
@@ -41,7 +43,7 @@ const MenuGridItem = ({
 
   return (
     <article className="menu-item txt-white">
-      {userRole === "admin" && (
+      {userRole === "NV" && (
         <div
           className={`stock-status ${isStock ? "in-stock" : "out-of-stock"}`}
         >
@@ -98,7 +100,7 @@ const MenuGridItem = ({
       </div>
 
       {/* Add click event to toggle stock status */}
-      {userRole === "admin" && (
+      {userRole === "NV" && (
         <button onClick={handleToggleStock} className="toggle-stock-btn">
           {isStock ? "Mark as Out of Stock" : "Restock"}
         </button>

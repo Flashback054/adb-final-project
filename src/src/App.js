@@ -99,7 +99,7 @@ function App() {
       MaTaiKhoan: 1,
       TenDangNhap: "user123",
       MatKhau: "hashedPassword123",
-      LoaiTaiKhoan: "KH",
+      LoaiTaiKhoan: "NV",
       MaNguoiDung: 1,
       Hoten: "Nguyễn Văn A",
       SDT: "0123456789",
