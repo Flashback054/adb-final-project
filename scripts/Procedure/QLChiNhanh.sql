@@ -78,7 +78,9 @@ BEGIN
     LEFT JOIN 
         HOADONTHANHTOAN ht ON pd.MaPhieu = ht.MaPhieu  
     GROUP BY 
-        cn.TenChiNhanh;                              
+        cn.TenChiNhanh
+	ORDER BY 
+        TongDoanhThu DESC;
 
 END;
 GO
