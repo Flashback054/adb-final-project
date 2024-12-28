@@ -63,20 +63,25 @@ END;
 GO
 
 
---Thống kê hoạt động của chi nhánh
---CREATE PROCEDURE SP_ThongKeDoanhThuChiNhanh
---AS
---BEGIN
---    SELECT 
---        cn.TenChiNhanh,
---        COUNT(pd.MaPhieu) AS SoLuongGiaoDich,
---        SUM(pd.TongTien) AS TongDoanhThu
---    FROM 
---        CHINHANH cn
---    LEFT JOIN 
---        PHIEUDATMON pd ON cn.MaChiNhanh = pd.MaChiNhanh
---    GROUP BY 
---        cn.TenChiNhanh;
---END;
---GO
+CREATE PROCEDURE SP_ThongKeDoanhThuChiNhanh
+AS
+BEGIN
+
+    SELECT 
+        cn.TenChiNhanh,                               
+        COUNT(pd.MaPhieu) AS SoLuongGiaoDich,         
+        ISNULL(SUM(ht.TongTien), 0) AS TongDoanhThu   
+	FROM
+        CHINHANH cn
+    LEFT JOIN 
+        PHIEUDATMON pd ON cn.MaChiNhanh = pd.MaChiNhanh 
+    LEFT JOIN 
+        HOADONTHANHTOAN ht ON pd.MaPhieu = ht.MaPhieu  
+    GROUP BY 
+        cn.TenChiNhanh
+	ORDER BY 
+        TongDoanhThu DESC;
+
+END;
+GO
 
