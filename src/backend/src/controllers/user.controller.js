@@ -30,8 +30,6 @@ exports.createUser = async (req, res, next) => {
 		validateBeforeSave: false,
 	});
 
-  const 
-
 	res.status(201).json({
 		status: "success",
 		data: newUser,
