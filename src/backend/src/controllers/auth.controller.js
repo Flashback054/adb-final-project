@@ -180,51 +180,6 @@ exports.logout = (req, res, next) => {
 	res.status(200).json({ status: "success" });
 };
 
-// exports.updatePassword = async (req, res, next) => {
-// 	const { oldPassword, newPassword, newPasswordConfirm } = req.body;
-
-// 	// 1) Get user from collection
-// 	const user = await User.findById(req.user.id).select("+password");
-
-// 	// 2) Check if POSTed current password is correct
-// 	if (!(await user.isCorrectPassword(oldPassword))) {
-// 		throw new AppError(
-// 			401,
-// 			"INVALID_CREDENTIALS",
-// 			"Mật khẩu hiện tại không đúng."
-// 		);
-// 	}
-
-// 	// 3) Check if new password and confirm password are the same
-// 	if (newPassword !== newPasswordConfirm) {
-// 		throw new AppError(
-// 			400,
-// 			"INVALID_ARGUMENTS",
-// 			"Mật khẩu nhập lại không khớp.",
-// 			{
-// 				newPasswordConfirm,
-// 			}
-// 		);
-// 	}
-
-// 	// 3) If so, update password
-// 	user.password = newPassword;
-// 	await user.save();
-
-// 	// 4) Log user in, send JWT
-// 	const { accessToken, accessTokenOptions } = createAccessToken(user, req);
-// 	const { refreshToken, refreshTokenOptions } = createRefreshToken(user, req);
-
-// 	res.cookie("accessToken", accessToken, accessTokenOptions);
-// 	res.cookie("refreshToken", refreshToken, refreshTokenOptions);
-
-// 	res.status(200).json({
-// 		status: "success",
-// 		accessToken,
-// 		refreshToken,
-// 	});
-// };
-
 exports.protect = async (req, res, next) => {
 	// 1) Getting tokens
 	let accessToken;
@@ -277,14 +232,12 @@ exports.protect = async (req, res, next) => {
 	}
 
 	// 3) Check if user still exists
-
-	// Find user by id and include inactive users
 	const currentTaiKhoan = await TAIKHOAN.getById(decoded.MaTaiKhoan);
 	if (!currentTaiKhoan)
 		throw new AppError(404, "NOT_FOUND", "Tài khoản không tồn tại.");
 
 	// GRANT ACCESS TO PROTECTED ROUTE
-	req.user = currentTaiKhoan;
+	req.taiKhoan = currentTaiKhoan;
 
 	return next();
 };
@@ -292,10 +245,10 @@ exports.protect = async (req, res, next) => {
 exports.restrictTo = (...roles) => {
 	return (req, res, next) => {
 		// Admin have access to all routes
-		if (req.user.LoaiTaiKhoan === "ADMIN") return next();
+		if (req.taiKhoan.LoaiTaiKhoan === "ADMIN") return next();
 
 		// roles ['admin', 'cashier', 'staff', 'customer']
-		if (!roles.includes(req.user.role)) {
+		if (!roles.includes(req.taiKhoan.LoaiTaiKhoan)) {
 			throw new AppError(
 				403,
 				"ACCESS_DENIED",
@@ -306,32 +259,6 @@ exports.restrictTo = (...roles) => {
 		next();
 	};
 };
-
-// exports.passwordConfirm = async (req, res, next) => {
-// 	const { passwordConfirm } = req.body;
-
-// 	if (!passwordConfirm) {
-// 		throw new AppError(400, "INVALID_ARGUMENTS", "Phải có mật khẩu xác nhận.", {
-// 			passwordConfirm,
-// 		});
-// 	}
-
-// 	const user = await User.findById(req.user.id).select("+password");
-// 	const isCorrectPassword = await user.isCorrectPassword(passwordConfirm);
-
-// 	if (!isCorrectPassword) {
-// 		throw new AppError(
-// 			400,
-// 			"INVALID_CREDENTIALS",
-// 			"Mật khẩu xác nhận không khớp.",
-// 			{
-// 				passwordConfirm,
-// 			}
-// 		);
-// 	}
-
-// 	next();
-// };
 
 async function verifyToken(token, tokenSecret) {
 	try {

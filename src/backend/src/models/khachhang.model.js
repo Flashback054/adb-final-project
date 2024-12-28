@@ -61,8 +61,8 @@ const KHACHHANG = {
 			.input("Phuong", KHACHHANG.Phuong)
 			.input("Quan", KHACHHANG.Quan)
 			.input("ThanhPho", KHACHHANG.ThanhPho)
-			.query`UPDATE KHACHHANG SET HoTen = @HoTen, SDT = @SDT, Email = @Email, GioiTinh = @GioiTinh, CCCD = @CCCD, Duong = @Duong, Phuong = @Phuong, Quan = @Quan, ThanhPho = @ThanhPho WHERE MaKhachHang = @id`;
-		return this.getById(id);
+			.query`UPDATE KHACHHANG SET HoTen = @HoTen, SDT = @SDT, Email = @Email, GioiTinh = @GioiTinh, CCCD = @CCCD, Duong = @Duong, Phuong = @Phuong, Quan = @Quan, ThanhPho = @ThanhPho WHERE MaKhachHang = @id RETURNING *`;
+		return result.recordset[0];
 	},
 
 	delete: async function (id) {
