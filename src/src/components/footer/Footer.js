@@ -2,7 +2,7 @@ import React from "react";
 import FooterMenu from "./FooterMenu";
 import FooterContact from "./FooterContact";
 import FooterLegal from "./FooterLegal";
-import './footer.css'
+import "./footer.css";
 
 const Footer = () => {
   return (
@@ -14,6 +14,6 @@ const Footer = () => {
       <FooterContact />
     </footer>
   );
-}
+};
 
 export default Footer;

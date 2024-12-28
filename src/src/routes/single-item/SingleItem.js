@@ -48,35 +48,11 @@ const SingleItem = ({ handleAddProduct, handleRemoveProduct }) => {
             <h2>{singleProduct?.ItemName}</h2>
             <p>{singleProduct?.ItemIngredients}</p>
           </section>
-          {singleProduct?.attributes?.length === 0
-            ? null
-            : singleProduct?.attributes?.map((attribute) => (
-                <Attribute
-                  key={attribute.id}
-                  className="single-item__attributes"
-                  handleSelectedAttributes={handleSelectedAttributes}
-                  attribute={attribute}
-                  targetAttribute={targetAttribute}
-                />
-              ))}
           <section className="single-item__pricing">
-            {singleProduct.sale === true ? (
-              <section className="single-item__pricing-sale">
-                <p className="single-item__pricing-prev">
-                  <span>$</span>
-                  {singleProduct.ItemPriceBefore}
-                </p>
-                <p className="single-item__pricing-curr">
-                  <span>$</span>
-                  {singleProduct.ItemPrice}
-                </p>
-              </section>
-            ) : (
-              <p className="single-item__pricing-curr">
-                <span>$</span>
-                {singleProduct.ItemPrice}
-              </p>
-            )}
+            <p className="single-item__pricing-curr">
+              <span>$</span>
+              {singleProduct.ItemPrice}
+            </p>
             <AddToCartButton
               handleAddProduct={handleAddProduct}
               handleRemoveProduct={handleRemoveProduct}

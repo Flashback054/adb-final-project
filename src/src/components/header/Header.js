@@ -17,6 +17,7 @@ const Header = ({
   hideMenu,
   validLogin,
   activateLoginModal,
+  currentUser,
 }) => {
   return (
     <header>
@@ -127,26 +128,7 @@ const Header = ({
               About
             </NavLink>
           </li>
-          <li>
-            <NavLink
-              onClick={() => {
-                ResetLocation();
-                hideMenu();
-              }}
-              style={({ isActive }) =>
-                isActive
-                  ? {
-                      textDecoration: "none",
-                      color: "#ff6240",
-                    }
-                  : {}
-              }
-              className="txt-white"
-              to="/contact"
-            >
-              Contact
-            </NavLink>
-          </li>
+
           <li>
             <NavLink
               onClick={() => {
@@ -167,6 +149,68 @@ const Header = ({
               Order
             </NavLink>
           </li>
+          <li>
+            <NavLink
+              onClick={() => {
+                ResetLocation();
+                hideMenu();
+              }}
+              style={({ isActive }) =>
+                isActive
+                  ? {
+                      textDecoration: "none",
+                      color: "#ff6240",
+                    }
+                  : {}
+              }
+              className="txt-white"
+              to="/branches"
+            >
+              Branch
+            </NavLink>
+          </li>
+          <li>
+            <NavLink
+              onClick={() => {
+                ResetLocation();
+                hideMenu();
+              }}
+              style={({ isActive }) =>
+                isActive
+                  ? {
+                      textDecoration: "none",
+                      color: "#ff6240",
+                    }
+                  : {}
+              }
+              className="txt-white"
+              to="/review"
+            >
+              Review
+            </NavLink>
+          </li>
+          {currentUser.LoaiTaiKhoan !== "KH" && (
+            <li>
+              <NavLink
+                onClick={() => {
+                  ResetLocation();
+                  hideMenu();
+                }}
+                style={({ isActive }) =>
+                  isActive
+                    ? {
+                        textDecoration: "none",
+                        color: "#ff6240",
+                      }
+                    : {}
+                }
+                className="txt-white"
+                to="/statistics"
+              >
+                Statistics
+              </NavLink>
+            </li>
+          )}
           {validLogin ? (
             <li>
               <NavLink

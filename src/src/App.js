@@ -29,6 +29,12 @@ import Careers from "./routes/careers/Careers.js";
 import BlogPost from "./routes/blog-post/BlogPost.js";
 import Profile from "./routes/profile/Profile.js";
 import ResetLocation from "./helpers/ResetLocation.js";
+import Statistics from "./routes/statistic/statistics.js";
+import RevenueStatistic from "./routes/statistic/revenue/revenue.js";
+import DishesStatistic from "./routes/statistic/dishes/dishes.js";
+import Customers from "./routes/statistic/customer/customers.js";
+import Branch from "./routes/branch/branch.js";
+import Review from "./routes/review/review.js";
 
 function App() {
   const [allCategories, setAllCategories] = useState([]);
@@ -462,6 +468,7 @@ function App() {
         handleLogout={handleLogout}
         validLogin={validLogin}
         productsQuantity={productsQuantity}
+        currentUser={currentUser}
       />
       <Routes>
         <Route path="/" element={<Homepage />} />
@@ -522,7 +529,8 @@ function App() {
             />
           }
         />
-        <Route path="/contact" element={<Contact />} />
+        <Route path="/branches" element={<Branch />} />
+        <Route path="/review" element={<Review />} />
         <Route exact path="/blog" element={<Blog />} />
         <Route path="/blog/:name" element={<BlogPost />} />
         <Route path="/about" element={<About />} />
@@ -609,6 +617,18 @@ function App() {
             />
           }
         />
+        {currentUser.LoaiTaiKhoan !== "KH" && (
+          <Route path="/statistics" element={<Statistics />} />
+        )}
+        {currentUser.LoaiTaiKhoan !== "KH" && (
+          <Route path="/statistics/revenue" element={<RevenueStatistic />} />
+        )}
+        {currentUser.LoaiTaiKhoan !== "KH" && (
+          <Route path="/statistics/dishes" element={<DishesStatistic />} />
+        )}
+        {currentUser.LoaiTaiKhoan !== "KH" && (
+          <Route path="/statistics/customers" element={<Customers />} />
+        )}
         <Route path="/careers" element={<Careers />} />
         <Route path="*" element={<NotFound />} />
         <Route path="/refunds" element={<Refunds />} />

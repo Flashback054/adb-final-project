@@ -11,9 +11,9 @@ const FooterMenu = () => {
           style={({ isActive }) =>
             isActive
               ? {
-                textDecoration: "none",
-                color: "#ff6240",
-              }
+                  textDecoration: "none",
+                  color: "#ff6240",
+                }
               : {}
           }
           onClick={ResetLocation}
@@ -29,9 +29,9 @@ const FooterMenu = () => {
           style={({ isActive }) =>
             isActive
               ? {
-                textDecoration: "none",
-                color: "#ff6240",
-              }
+                  textDecoration: "none",
+                  color: "#ff6240",
+                }
               : {}
           }
           onClick={ResetLocation}
@@ -46,9 +46,9 @@ const FooterMenu = () => {
           style={({ isActive }) =>
             isActive
               ? {
-                textDecoration: "none",
-                color: "#ff6240",
-              }
+                  textDecoration: "none",
+                  color: "#ff6240",
+                }
               : {}
           }
           onClick={ResetLocation}
@@ -58,27 +58,11 @@ const FooterMenu = () => {
           About
         </NavLink>
       </li>
-      <li>
-        <NavLink
-          style={({ isActive }) =>
-            isActive
-              ? {
-                textDecoration: "none",
-                color: "#ff6240",
-              }
-              : {}
-          }
-          onClick={ResetLocation}
-          className="txt-white"
-          to="/contact"
-        >
-          Contact
-        </NavLink>
-      </li>
+
       <li>
         <FooterSocials />
       </li>
     </ul>
   );
-}
-export default FooterMenu
+};
+export default FooterMenu;
