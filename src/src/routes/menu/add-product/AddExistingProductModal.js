@@ -19,7 +19,7 @@ const AddExistingProductModal = ({
             <li key={product.MaMon} className="product-item">
               <div className="product-item__info">
                 <img
-                  src={`/assets/mon/${product.HinhAnh}`}
+                  src={`http://localhost:8081/images/mon/${product.HinhAnh}`}
                   alt={product.TenMon}
                   style={{ width: "100px", height: "auto" }}
                 />
