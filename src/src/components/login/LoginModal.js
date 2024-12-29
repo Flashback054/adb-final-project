@@ -3,6 +3,7 @@ import "./loginModal.css";
 import LinkButton from "../Button";
 import { useNavigate } from "react-router-dom";
 import validateForm from "../validateForm";
+import { FaTrophy } from "react-icons/fa";
 
 const LoginModal = ({
   setLoginModalWindow,
@@ -13,20 +14,29 @@ const LoginModal = ({
   getUser,
 }) => {
   const navigate = useNavigate();
-  const [formValue, setFormValue] = useState({ email: "", password: "" });
+  const [formValue, setFormValue] = useState({ TenDangNhap: "", MatKhau: "" });
   const [formError, setFormError] = useState({});
   const [submit, setSubmit] = useState(false);
   const [loading, setLoading] = useState(false);
   const [verificationError, setVerificationError] = useState("");
   const validate = validateForm("login");
 
-  const getUsers = async () => {
+  const callAPILogin = async (payload) => {
     try {
-      const response = await fetch(process.env.REACT_APP_USERS_URL);
-      const body = await response.json();
-      return body.data;
+      const response = await fetch(
+        "http://localhost:8081/api/v1" + "/auth/login",
+        {
+          method: "POST",
+        }
+      );
+      if (!response.ok) {
+        throw new Error(`HTTP error! status: ${response.status}`);
+      }
+      const data = await response.json();
+      return data;
     } catch (err) {
-      console.log(err.message);
+      console.log("callAPILogin error:", err.message);
+      throw err;
     }
   };
 
@@ -40,7 +50,7 @@ const LoginModal = ({
 
   const hideLoginModal = () => {
     setLoginModalWindow(false);
-    setFormValue({ email: "", password: "" });
+    setFormValue({ TenDangNhap: "", MatKhau: "" });
     setFormError({});
     setSubmit(false);
   };
@@ -49,48 +59,29 @@ const LoginModal = ({
     setVerificationError("");
     e.preventDefault();
     setLoading(true);
-    setFormError(validate(formValue));
-    if (Object.keys(validate(formValue)).length > 0) {
-      setLoading(false);
-      return;
-    } else {
-      //find all users
-      const existingUsers = await getUsers(formValue.email.toLowerCase());
-      //filter existence by email
-      const findByEmail = existingUsers.filter(
-        (u) => u.email === formValue.email.toLowerCase()
-      );
-      // if user not found by email
-      if (findByEmail.length === 0) {
-        setLoading(false);
-        setSubmit(false);
-        setFormValue({ email: "", password: "" });
-        setFormError({});
-        setVerificationError("Wrong email");
-        return;
-      } else if (
-        findByEmail.length > 0 &&
-        findByEmail[0].password !== formValue.password
-      ) {
-        setLoading(false);
-        setSubmit(false);
-        setFormValue({ email: "", password: "" });
-        setFormError({});
-        setVerificationError("Wrong password");
-        return;
-      } else if (
-        findByEmail.length > 0 &&
-        findByEmail[0].password === formValue.password
-      ) {
-        getUser(findByEmail[0].id);
+
+    //find all users
+    try {
+      const loginResult = await callAPILogin(formValue);
+
+      if (loginResult.status === "success") {
+        const accessToken = loginResult.accessToken;
+        localStorage.setItem("accessToken", accessToken);
         setLoading(false);
         hideLoginModal();
-        setFormValue({ email: "", password: "" });
+        setFormValue({ TenDangNhap: "", MatKhau: "" });
         setFormError({});
         setVerificationError("");
         setValidLogin(true);
         navigate("/menu");
+      } else {
+        setVerificationError("Invalid credentials");
+        setLoading(false);
       }
+    } catch (error) {
+      console.log("error: ", error);
+      setVerificationError("Invalid credentials");
+      setLoading(false);
     }
   };
 
@@ -123,21 +114,23 @@ const LoginModal = ({
               )}
               <input
                 onChange={handleValidation}
-                value={formValue.email}
-                name="email"
+                value={formValue.TenDangNhap}
+                name="TenDangNhap"
                 type="text"
-                placeholder="Email"
+                placeholder="TenDangNhap"
               />
-              <span className="modal__form__error">{formError.email}</span>
+              <span className="modal__form__error">
+                {formError.TenDangNhap}
+              </span>
               <input
                 onChange={handleValidation}
-                value={formValue.password}
-                name="password"
+                value={formValue.MatKhau}
+                name="MatKhau"
                 type="password"
                 autoComplete="true"
-                placeholder="Password"
+                placeholder="MatKhau"
               />
-              <span className="modal__form__error">{formError.password}</span>
+              <span className="modal__form__error">{formError.MatKhau}</span>
               {submit && Object.keys(formError).length === 0 && !validLogin ? (
                 <p className="modal__form__error">
                   We couldn't find an account. Try another credentials

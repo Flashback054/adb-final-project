@@ -191,3 +191,31 @@ select {
   height: 10rem;
   object-fit: cover;
 }
+/* Áp dụng cho toàn bộ các thẻ select */
+.register__form__field select {
+  width: 100%; /* Để chiếm toàn bộ chiều rộng container */
+  padding: 10px;
+  border-radius: 5px; /* Góc bo tròn */
+  border: 1px solid #ccc; /* Viền */
+  font-size: 16px; /* Cỡ chữ */
+  background-color: transparent; /* Màu nền */
+  color: #238f2a; /* Màu chữ */
+  outline: none; /* Loại bỏ viền mặc định khi focus */
+  transition: border-color 0.3s ease; /* Hiệu ứng hover */
+  border: 1px solid #fac56425;
+  background-color: transparent;
+  padding: 1rem;
+  border-radius: 10px;
+}
+
+.register__form__field select:focus {
+  outline: 1px solid var(--yellow); /* Đổi màu viền khi focus */
+  background-color: transparent; /* Màu nền khi chọn */
+}
+
+.register__form__field select:hover {
+  outline: 1px solid var(--yellow); /* Đổi màu viền khi hover */
+}
+.register__form__field select:active {
+  background-color: transparent; /* Giữ nền trong suốt khi click */
+}

@@ -2,6 +2,7 @@ import React, { useState, useEffect } from "react";
 import { Route, Routes, BrowserRouter } from "react-router-dom";
 import Header from "./components/header/Header.js";
 import Footer from "./components/footer/Footer.js";
+import { toast, ToastContainer } from "react-toastify";
 import {
   About,
   Blog,
@@ -134,7 +135,21 @@ function App() {
     setLoginModalWindow(!loginModalWindow);
   };
 
-  const handleLogout = () => {
+  const handleLogout = async () => {
+    const response = await fetch(
+      "http://localhost:8081/api/v1" + "/auth/logout",
+      {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+      }
+    );
+    if (response.ok) {
+      toast.success("Đăng xuất thành công");
+    }
+
+    localStorage.clear();
     setValidLogin(false);
     hideMenu();
     setCurrentUser({});
@@ -637,6 +652,17 @@ function App() {
       </Routes>
 
       <Footer />
+      <ToastContainer
+        position="top-right"
+        autoClose={3000}
+        hideProgressBar={false}
+        newestOnTop={false}
+        closeOnClick
+        rtl={false}
+        pauseOnFocusLoss
+        draggable
+        pauseOnHover
+      />
     </BrowserRouter>
   );
 }
