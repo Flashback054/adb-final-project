@@ -4,101 +4,55 @@ import "./revenue.css"; // Import the CSS file
 
 const RevenueStatistic = () => {
   const [activeTab, setActiveTab] = useState("30days");
-  const [chartData, setChartData] = useState([]);
+  // const [chartData, setChartData] = useState([]);
+  const [tableData, setTableData] = useState([]);
+  const [loading, setLoading] = useState(false);
+  const [error, setError] = useState("");
 
-  const last30DaysData = [
-    { time: "2024-11-18", value: 120 },
-    { time: "2024-11-19", value: 130 },
-    { time: "2024-11-20", value: 150 },
-    { time: "2024-11-21", value: 170 },
-    { time: "2024-11-22", value: 160 },
-    { time: "2024-11-23", value: 180 },
-    { time: "2024-11-24", value: 190 },
-    { time: "2024-11-25", value: 200 },
-    { time: "2024-11-26", value: 210 },
-    { time: "2024-11-27", value: 220 },
-    { time: "2024-11-28", value: 230 },
-    { time: "2024-11-29", value: 240 },
-    { time: "2024-11-30", value: 250 },
-    { time: "2024-12-01", value: 260 },
-    { time: "2024-12-02", value: 270 },
-    { time: "2024-12-03", value: 280 },
-    { time: "2024-12-04", value: 290 },
-    { time: "2024-12-05", value: 300 },
-    { time: "2024-12-06", value: 310 },
-    { time: "2024-12-07", value: 320 },
-    { time: "2024-12-08", value: 330 },
-    { time: "2024-12-09", value: 340 },
-    { time: "2024-12-10", value: 350 },
-    { time: "2024-12-11", value: 360 },
-    { time: "2024-12-12", value: 370 },
-    { time: "2024-12-13", value: 380 },
-    { time: "2024-12-14", value: 390 },
-    { time: "2024-12-15", value: 400 },
-    { time: "2024-12-16", value: 410 },
-    { time: "2024-12-17", value: 420 },
-  ];
+  const loadData = async (range) => {
+    setLoading(true);
+    setError("");
 
-  const last12MonthsData = [
-    { time: "2023-12", value: 120 },
-    { time: "2024-01", value: 130 },
-    { time: "2024-02", value: 140 },
-    { time: "2024-03", value: 150 },
-    { time: "2024-04", value: 160 },
-    { time: "2024-05", value: 170 },
-    { time: "2024-06", value: 180 },
-    { time: "2024-07", value: 190 },
-    { time: "2024-08", value: 200 },
-    { time: "2024-09", value: 210 },
-    { time: "2024-10", value: 220 },
-    { time: "2024-11", value: 230 },
-  ];
+    try {
+      const response = await fetch(
+        `http://localhost:8081/api/v1/statistics/revenue?period=${range}`,
+        {
+          method: "GET",
+          headers: {
+            "Content-Type": "application/json",
+          },
+        }
+      );
 
-  const last10YearsData = [
-    { time: "2014", value: 100 },
-    { time: "2015", value: 110 },
-    { time: "2016", value: 120 },
-    { time: "2017", value: 130 },
-    { time: "2018", value: 140 },
-    { time: "2019", value: 150 },
-    { time: "2020", value: 160 },
-    { time: "2021", value: 170 },
-    { time: "2022", value: 180 },
-    { time: "2023", value: 190 },
-    { time: "2024", value: 200 },
-  ];
+      if (!response.ok) {
+        throw new Error(`Failed to fetch data for period: ${range}`);
+      }
 
-  const mockData = {
-    "30days": last30DaysData,
-    "12months": last12MonthsData,
-    "10years": last10YearsData,
+      const data = await response.json();
+      setTableData(data.data); // Dữ liệu từ API
+    } catch (err) {
+      setError(err.message);
+    } finally {
+      setLoading(false);
+    }
   };
 
-  const loadData = (range) => {
-    setChartData(mockData[range]);
+  const filterDataForChart = () => {
+    const data = tableData.map((item) => ({
+      time: item.date,
+      value: item.totalRevenue,
+    }));
+    return data;
   };
+
+  const chartData = filterDataForChart();
+
+  console.log(chartData);
 
   useEffect(() => {
     loadData(activeTab);
   }, [activeTab]);
 
-  const generateTableData = (data) => {
-    return data.map((item, index) => {
-      const atTable = Math.floor(Math.random() * 10) + 1;
-      const delivery = Math.floor(Math.random() * 10) + 1;
-      const totalOrders = atTable + delivery;
-
-      return {
-        date: item.time,
-        totalRevenue: item.value.toLocaleString() + " VNĐ",
-        atTableOrders: atTable,
-        deliveryOrders: delivery,
-        totalOrders: totalOrders,
-      };
-    });
-  };
-
-  const tableData = generateTableData(chartData);
   return (
     <div className="revenue-statistic-container">
       <div className="tab-container">

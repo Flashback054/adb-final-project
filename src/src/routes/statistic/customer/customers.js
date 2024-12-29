@@ -76,9 +76,35 @@ const mockData = {
 const Customers = () => {
   const [activeTab, setActiveTab] = useState("last30days");
   const [chartData, setChartData] = useState([]);
+  const [loading, setLoading] = useState(false);
+  const [error, setError] = useState("");
 
-  const loadData = (range) => {
-    setChartData(mockData[range]);
+  const loadData = async (range) => {
+    setLoading(true);
+    setError("");
+
+    try {
+      const response = await fetch(
+        `http://localhost:8081/api/v1/statistics/employee?period=${range}`,
+        {
+          method: "GET",
+          headers: {
+            "Content-Type": "application/json",
+          },
+        }
+      );
+
+      if (!response.ok) {
+        throw new Error(`Failed to fetch data for period: ${range}`);
+      }
+
+      const data = await response.json();
+      setChartData(data.data); // Dữ liệu từ API
+    } catch (err) {
+      setError(err.message);
+    } finally {
+      setLoading(false);
+    }
   };
 
   useEffect(() => {

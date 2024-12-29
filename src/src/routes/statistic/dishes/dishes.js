@@ -43,32 +43,48 @@ const DishesStatistic = () => {
   const [activeTab, setActiveTab] = useState("last30days");
   const [chartData, setChartData] = useState([]);
   const [tableData, setTableData] = useState([]);
+  const [loading, setLoading] = useState(false);
+  const [error, setError] = useState("");
 
-  const mockData = {
-    last30days: last30days,
-    last12months: last12months,
-    last10years: last10years,
-  };
+  const loadData = async (range) => {
+    setLoading(true);
+    setError("");
 
-  const loadData = (range) => {
-    setChartData(mockData[range].slice(0, 5));
-    setTableData(generateTableData(mockData[range]));
+    try {
+      const response = await fetch(
+        `http://localhost:8081/api/v1/statistics/dishes?period=${range}`,
+        {
+          method: "GET",
+          headers: {
+            "Content-Type": "application/json",
+          },
+        }
+      );
+
+      if (!response.ok) {
+        throw new Error(`Failed to fetch data for period: ${range}`);
+      }
+
+      const data = await response.json();
+      setTableData(data.data); // Lưu dữ liệu bảng
+      setChartData(
+        data.data.map((item) => ({
+          name: item.name,
+          price: item.price,
+          sold: item.sold,
+          revenue: item.revenue,
+        }))
+      );
+    } catch (error) {
+      setError(error.message);
+    } finally {
+      setLoading(false);
+    }
   };
 
   useEffect(() => {
     loadData(activeTab);
   }, [activeTab]);
-
-  const generateTableData = (data) => {
-    return data.map((item, index) => {
-      return {
-        name: item.name,
-        price: item.price,
-        sold: item.sold,
-        revenue: item.revenue,
-      };
-    });
-  };
 
   return (
     <div className="dishes-statistic-container">

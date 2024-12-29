@@ -3,21 +3,21 @@ import React from "react";
 const CustomersTable = ({ data }) => {
   return (
     <div className="table-container">
-      <h2 className="table-title">Customer Details by Date</h2>
+      <h2 className="table-title">Employee Details by Date</h2>
       <table className="customers-table">
         <thead>
           <tr>
-            <th>Date</th>
-            <th>New Customers</th>
-            <th>Total Customers</th>
+            <th>Employee Name</th>
+            <th>Total Order</th>
+            <th>Total Revenue</th>
           </tr>
         </thead>
         <tbody>
           {data.map((entry, index) => (
             <tr key={index}>
-              <td>{entry.date}</td>
-              <td>{entry.newCustomers}</td>
-              <td>{entry.totalCustomers}</td>
+              <td>{entry.employeeId}</td>
+              <td>{entry.totalOrders}</td>
+              <td>{entry.totalRevenue}</td>
             </tr>
           ))}
         </tbody>
