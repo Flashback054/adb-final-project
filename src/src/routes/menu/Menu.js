@@ -29,6 +29,7 @@ const Menu = ({
   const [currentProducts, setcurrentProducts] = useState(
     [...allMonThucDon].reverse().slice(itemOffset, endOffset)
   );
+  const [originalProducts, setOriginalProducts] = useState([]);
   const [pageCountProducts, setpageCountProducts] = useState(
     Math.ceil(allMonThucDon.length / 5)
   );
@@ -40,6 +41,21 @@ const Menu = ({
   const user = JSON.parse(sessionStorage.getItem("currentUser"));
   console.log("usser" + user);
 
+  const findMenuItem2 = (e) => {
+    const inputValue = e.target.value.toLowerCase();
+
+    if (inputValue === "") {
+      // Khôi phục danh sách gốc khi không có giá trị input
+      setAllMonThucDon(originalProducts);
+      return;
+    }
+
+    const filteredProducts = originalProducts.filter((product) =>
+      product.TenMon.toLowerCase().includes(inputValue)
+    );
+
+    setAllMonThucDon(filteredProducts);
+  };
   const userRole = JSON.parse(
     sessionStorage.getItem("currentUser")
   ).LoaiTaiKhoan;
@@ -82,6 +98,39 @@ const Menu = ({
     }
   };
 
+  const handleUpdateProductStatus2 = async (MaMon, CoPhucVuKhong) => {
+    try {
+      // Đảm bảo giá trị CoPhucVuKhong chỉ nhận 0 hoặc 1
+      const validValue = CoPhucVuKhong ? 1 : 0;
+
+      const response = await fetch(
+        `http://localhost:8081/api/v1/thucdon/1/${MaMon}`,
+        {
+          method: "PUT",
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: `Bearer ${localStorage.getItem("accessToken")}`,
+          },
+          body: JSON.stringify({
+            CoPhucVuKhong: validValue,
+            CoGiaoHangKhong: 1,
+          }),
+        }
+      );
+
+      if (!response.ok) {
+        throw new Error(`Failed to update product status with MaMon: ${MaMon}`);
+      }
+
+      const data = await response.json();
+      toast.success("Cập nhật trạng thái sản phẩm thành công");
+      getThucDonMon();
+      return data; // Trả về kết quả nếu cần xử lý tiếp
+    } catch (error) {
+      console.error("Error updating product status:", error.message);
+    }
+  };
+
   const resetPagination = () => {
     setItemOffset(0);
     setEndOffset(5);
@@ -101,6 +150,7 @@ const Menu = ({
       }
       const data = await response.json();
       setAllMonThucDon(data.data);
+      setOriginalProducts(data.data);
     } catch (error) {
       console.log(error);
       throw new Error(`Failed to get menu items, ${error.message}`);
@@ -155,7 +205,7 @@ const Menu = ({
         allCategories={allCategories}
         changeCategory={changeCategory}
         resetPagination={resetPagination}
-        findMenuItem={findMenuItem}
+        findMenuItem={findMenuItem2}
       />
       <article className="menu__items">
         {currentProducts.length === 0 ? (
@@ -167,7 +217,7 @@ const Menu = ({
               singleProduct={singleProduct}
               handleAddProduct={handleAddProduct}
               handleRemoveProduct={handleRemoveProduct}
-              handleUpdateProductStatus={handleUpdateProductStatus}
+              handleUpdateProductStatus={handleUpdateProductStatus2}
             />
           ))
         )}
