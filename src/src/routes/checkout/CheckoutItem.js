@@ -10,7 +10,10 @@ const CheckoutItem = ({ cartItem }) => {
 
   return (
     <section className="checkout__item">
-      <img src={`/assets/mon/${cartItem.HinhAnh}`} alt={cartItem.TenMon} />
+      <img
+        src={`http://localhost:8081/images/mon/${cartItem.HinhAnh}`}
+        alt={cartItem.TenMon}
+      />
       <section className="checkout__item__info">
         {cartItem.userSelectedAttributes.length === 0 ? (
           <h3>{cartItem.TenMon}</h3>

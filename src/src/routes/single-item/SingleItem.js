@@ -57,7 +57,7 @@ const SingleItem = ({ handleAddProduct, handleRemoveProduct }) => {
       </Link>
       <article className="single-item__inner flex-container flex-column txt-white">
         <img
-          src={`/assets/mon/${singleProduct?.HinhAnh}`}
+          src={`http://localhost:8081/images/mon/${singleProduct?.HinhAnh}`}
           alt={`${singleProduct?.TenMon}`}
         />
         <section className="single-item__info">

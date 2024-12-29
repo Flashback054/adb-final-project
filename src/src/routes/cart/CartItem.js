@@ -15,7 +15,7 @@ const CartItem = ({
         return (
           <section className="cart__items__single" key={index}>
             <img
-              src={`/assets/mon/${cartItem.HinhAnh}`}
+              src={`http://localhost:8081/images/mon/${cartItem.HinhAnh}`}
               alt={cartItem.TenMon}
             />
             <section className="cart__items__content">

@@ -541,6 +541,7 @@ function App() {
               activeCategory={activeCategory}
               handleAddNewProduct={handleAddNewProduct}
               handleUpdateProductStatus={handleUpdateProductStatus}
+              currentUser={currentUser}
             />
           }
         />

@@ -9,14 +9,13 @@ const MenuGridItem = ({
   handleAddProduct,
   handleRemoveProduct,
   handleUpdateProductStatus,
+  currentUser,
 }) => {
   const [selectedAttributes, setSelectedAttributes] = useState([]);
   const [targetAttribute, setTargetAttribute] = useState("");
 
   const isStock = singleProduct.CoPhucVuKhong;
-  const userRole = JSON.parse(
-    sessionStorage.getItem("currentUser")
-  ).LoaiTaiKhoan;
+  const userRole = currentUser.LoaiTaiKhoan;
 
   const handleToggleStock = () => {
     const updateCoPhucVuKhong = !singleProduct.CoPhucVuKhong;
@@ -57,7 +56,7 @@ const MenuGridItem = ({
         className="menu-item__link"
       >
         <img
-          src={`/assets/mon/${singleProduct.HinhAnh}`}
+          src={`http://localhost:8081/images/mon/${singleProduct.HinhAnh}`}
           alt={`${singleProduct.TenMon}`}
         />
       </Link>

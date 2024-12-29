@@ -21,6 +21,7 @@ const Menu = ({
   findMenuItem,
   handleAddNewProduct,
   handleUpdateProductStatus,
+  currentUser,
 }) => {
   const [allMonThucDon, setAllMonThucDon] = useState([]);
   const [allExistingMon, setAllExistingMon] = useState([]);
@@ -38,9 +39,6 @@ const Menu = ({
   const [addExistingProductModalWindow, setAddExistingProductModalWindow] =
     useState(false);
 
-  const user = JSON.parse(sessionStorage.getItem("currentUser"));
-  console.log("usser" + user);
-
   const findMenuItem2 = (e) => {
     const inputValue = e.target.value.toLowerCase();
 
@@ -56,9 +54,7 @@ const Menu = ({
 
     setAllMonThucDon(filteredProducts);
   };
-  const userRole = JSON.parse(
-    sessionStorage.getItem("currentUser")
-  ).LoaiTaiKhoan;
+  const userRole = currentUser.LoaiTaiKhoan;
 
   const activateAddNewProductModal = () => {
     setAddNewProductModalWindow(!addNewProductModalWindow);
@@ -218,6 +214,7 @@ const Menu = ({
               handleAddProduct={handleAddProduct}
               handleRemoveProduct={handleRemoveProduct}
               handleUpdateProductStatus={handleUpdateProductStatus2}
+              currentUser={currentUser}
             />
           ))
         )}
