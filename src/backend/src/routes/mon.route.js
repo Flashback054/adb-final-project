@@ -4,8 +4,6 @@ const express = require("express");
 
 const router = express.Router();
 
-router.get("/search", MonController.searchByTenMon);
-
 router.get("/", MonController.getAll);
 router.get("/:id", MonController.getById);
 

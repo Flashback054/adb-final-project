@@ -1,6 +1,4 @@
 const database = require("../database/database");
-const { getAll } = require("./khachhang.model");
-
 // CREATE TABLE [dbo].[PHIEUDATMON](
 // 	[MaPhieu] [int] IDENTITY(1,1) NOT NULL,
 // 	[NgayLap] [date] NOT NULL,
@@ -20,13 +18,6 @@ const PHIEUDATMON = {
 			.query`SELECT * FROM PHIEUDATMON WHERE MaPhieu = @id`;
 		return result.recordset[0];
 	},
-	getAllByMaKhachHang: async function (MaKhachHang) {
-		const pool = await database.poolPromise;
-		const result = await pool.request().input("MaKhachHang", MaKhachHang)
-			.query`SELECT * FROM PHIEUDATMON WHERE MaKhachHang = @MaKhachHang`;
-		return result.recordset;
-	},
-
 	create: async function (newPHIEUDATMON) {
 		const pool = await database.poolPromise;
 		const result = await pool
@@ -57,3 +48,5 @@ const PHIEUDATMON = {
 		return result.rowsAffected;
 	},
 };
+
+module.exports = PHIEUDATMON;

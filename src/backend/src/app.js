@@ -13,6 +13,10 @@ const { fromZodError } = require("zod-validation-error");
 // const convertToReadableMetadata = require("./utils/convertToReadableMetadata");
 
 const authRouter = require("./routes/auth.route");
+const monRouter = require("./routes/mon.route");
+const thucdonMonRouter = require("./routes/thucdon_mon.route");
+const phieuDatMonRouter = require("./routes/phieudatmon.route");
+const phieuDatBanRouter = require("./routes/phieudatban.route");
 
 const app = express();
 
@@ -76,18 +80,13 @@ app.use(express.urlencoded({ extended: true }));
 app.use(express.static(`${__dirname}/public`));
 
 // // Routes
-// app.use("/api/v1/users", userRouter);
-// app.use("/api/v1/products", productRouter);
-// app.use("/api/v1/reviews", reviewRouter);
-// app.use("/api/v1/orders", orderRouter);
-// app.use("/api/v1/inventory-items", inventoryItemRouter);
-// app.use("/api/v1/menu-histories", menuHistoryRouter);
+
 app.use("/api/v1/auth", authRouter);
-// app.use("/api/v1/charge-histories", chargeHistoryRouter);
-// app.use("/api/v1/today-menu", todayMenuRouter);
-// app.use("/api/v1/inventory-exports", inventoryExportRouter);
-// app.use("/api/v1/inventory-imports", inventoryImportRouter);
-// app.use("/api/v1/payments", paymentRouter);
+app.use("/api/v1/mon", monRouter);
+app.use("/api/v1/thucdon", thucdonMonRouter);
+app.use("/api/v1/phieudatmon", phieuDatMonRouter);
+app.use("/api/v1/phieudatban", phieuDatBanRouter);
+
 // app.use("/api/v1/statistics", statisticRouter);
 
 // Error handler

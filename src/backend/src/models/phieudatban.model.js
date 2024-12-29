@@ -22,6 +22,14 @@ const PHIEUDATBAN = {
 			.query`SELECT * FROM PHIEUDATBAN WHERE MaPhieuDatBan = @id`;
 		return result.recordset[0];
 	},
+
+	getAllByMaKhachHang: async function (MaKhachHang) {
+		const pool = await database.poolPromise;
+		const result = await pool.request().input("MaKhachHang", MaKhachHang)
+			.query`SELECT * FROM PHIEUDATBAN JOIN PHIEUDATMON ON MaPhieuDatBan = MaPhieu WHERE MaKhachHang = @MaKhachHang`;
+		return result.recordsets;
+	},
+
 	create: async function (newPHIEUDATBAN) {
 		const pool = await database.poolPromise;
 		const result = await pool

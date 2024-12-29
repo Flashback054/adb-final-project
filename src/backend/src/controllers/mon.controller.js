@@ -1,6 +1,16 @@
 const MON = require("../models/mon.model");
 
 exports.getAll = async (req, res, next) => {
+	const { search } = req.query;
+	if (search) {
+		const mons = await MON.searchByTenMon(search);
+		res.status(200).json({
+			status: "success",
+			data: mons,
+		});
+		return;
+	}
+
 	const mons = await MON.getAll();
 	res.status(200).json({
 		status: "success",
@@ -40,13 +50,4 @@ exports.delete = async (req, res, next) => {
 	const { id } = req.params;
 	await MON.delete(id);
 	res.status(204).json();
-};
-
-exports.searchByTenMon = async (req, res, next) => {
-	const { search } = req.query;
-	const mons = await MON.searchByTenMon(search);
-	res.status(200).json({
-		status: "success",
-		data: mons,
-	});
 };

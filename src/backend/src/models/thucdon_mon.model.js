@@ -1,3 +1,6 @@
+const {
+	getMonsNotInThucDon,
+} = require("../controllers/thucdon_mon.controller");
 const database = require("../database/database");
 
 // CREATE TABLE [dbo].[THUCDON_MON](
@@ -9,7 +12,14 @@ const database = require("../database/database");
 const THUCDON_MON = {
 	getAll: async function () {
 		const pool = await database.poolPromise;
-		const result = await pool.request().query`SELECT * FROM THUCDON_MON`;
+		const result = await pool.request()
+			.query`SELECT MaThucDon, MON.* FROM THUCDON_MON JOIN MON ON THUCDON_MON.MaMon = MON.MaMon`;
+		return result.recordset;
+	},
+	getAllByMaThucDon: async function (MaThucDon) {
+		const pool = await database.poolPromise;
+		const result = await pool.request().input("MaThucDon", MaThucDon)
+			.query`SELECT MaThucDon, MON.* FROM THUCDON_MON JOIN MON ON THUCDON_MON.MaMon = MON.MaMon WHERE MaThucDon = @MaThucDon`;
 		return result.recordset;
 	},
 	getById: async function (MaThucDon, MaMon) {
@@ -18,7 +28,7 @@ const THUCDON_MON = {
 			.request()
 			.input("MaThucDon", MaThucDon)
 			.input("MaMon", MaMon)
-			.query`SELECT * FROM THUCDON_MON WHERE MaThucDon = @MaThucDon AND MaMon = @MaMon`;
+			.query`SELECT MaThucDon, MON.* FROM THUCDON_MON JOIN MON ON THUCDON_MON.MaMon = MON.MaMon WHERE MaThucDon = @MaThucDon AND THUCDON_MON.MaMon = @MaMon`;
 		return result.recordset[0];
 	},
 	create: async function (newTHUCDON_MON) {
@@ -53,21 +63,46 @@ const THUCDON_MON = {
 		return result.rowsAffected;
 	},
 
-	searchByMaThucDon: async function (MaThucDon) {
-		const pool = await database.poolPromise;
-		const result = await pool.request().input("MaThucDon", MaThucDon)
-			.query`SELECT * FROM THUCDON_MON WHERE MaThucDon = @MaThucDon`;
-		return result.recordsets;
-	},
-
-	updateMonStatuses: async function (MaMon, CoPhucVuKhong, CoGiaoHangKhong) {
+	updateMonStatuses: async function (
+		MaThucDon,
+		MaMon,
+		CoPhucVuKhong,
+		CoGiaoHangKhong
+	) {
 		const pool = await database.poolPromise;
 		const result = await pool
 			.request()
+			.input("MaThucDon", MaThucDon)
 			.input("MaMon", MaMon)
 			.input("CoPhucVuKhong", CoPhucVuKhong)
 			.input("CoGiaoHangKhong", CoGiaoHangKhong)
-			.query`UPDATE THUCDON_MON SET CoPhucVuKhong = @CoPhucVuKhong, CoGiaoHangKhong = @CoGiaoHangKhong WHERE MaMon = @MaMon RETURNING *`;
+			.query`UPDATE THUCDON_MON SET CoPhucVuKhong = @CoPhucVuKhong, CoGiaoHangKhong = @CoGiaoHangKhong WHERE MaThucDon = @MaThucDon AND MaMon = @MaMon`;
+
+		const result2 = await pool
+			.request()
+			.input("MaThucDon", MaThucDon)
+			.input("MaMon", MaMon)
+			.query`SELECT * FROM THUCDON_MON WHERE MaThucDon = @MaThucDon AND MaMon = @MaMon`;
+		console.log(result2);
+		return result2.recordset[0];
+	},
+
+	addMonToThucDon: async function (MaThucDon, MaMon) {
+		const pool = await database.poolPromise;
+		const result = await pool
+			.request()
+			.input("MaThucDon", MaThucDon)
+			.input("MaMon", MaMon)
+			.query`INSERT INTO THUCDON_MON (MaThucDon, MaMon, CoPhucVuKhong, CoGiaoHangKhong) OUTPUT inserted.* VALUES (@MaThucDon, @MaMon, 1, 1)`;
 		return result.recordset[0];
 	},
+
+	getMonsNotInThucDon: async function (MaThucDon) {
+		const pool = await database.poolPromise;
+		const result = await pool.request().input("MaThucDon", MaThucDon)
+			.query`SELECT * FROM MON JOIN WHERE MaMon NOT IN (SELECT MaMon FROM THUCDON_MON WHERE MaThucDon = @MaThucDon)`;
+		return result.recordset;
+	},
 };
+
+module.exports = THUCDON_MON;
