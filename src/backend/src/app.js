@@ -17,6 +17,7 @@ const monRouter = require("./routes/mon.route");
 const thucdonMonRouter = require("./routes/thucdon_mon.route");
 const phieuDatMonRouter = require("./routes/phieudatmon.route");
 const phieuDatBanRouter = require("./routes/phieudatban.route");
+const statisticRouter = require("./routes/statistic.route");
 
 const app = express();
 
@@ -86,6 +87,7 @@ app.use("/api/v1/mon", monRouter);
 app.use("/api/v1/thucdon", thucdonMonRouter);
 app.use("/api/v1/phieudatmon", phieuDatMonRouter);
 app.use("/api/v1/phieudatban", phieuDatBanRouter);
+app.use("/api/v1/statistics", statisticRouter);
 
 // app.use("/api/v1/statistics", statisticRouter);
 
