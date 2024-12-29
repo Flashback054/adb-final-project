@@ -50,7 +50,6 @@ exports.update = async function (req, res) {
 	const { MaThucDon, MaMon } = req.params;
 	const newTHUCDON_MON = req.body;
 	const result = await THUCDON_MON.update(MaThucDon, MaMon, newTHUCDON_MON);
-	console.log({ result });
 	res.status(200).json({
 		status: "success",
 		data: result,

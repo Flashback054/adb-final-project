@@ -58,7 +58,7 @@ const MON = {
 		const pool = await database.poolPromise;
 		const result = await pool.request().input("tenMon", tenMon)
 			.query`SELECT * FROM MON WHERE TenMon LIKE '%'+@tenMon+'%'`;
-		return result.recordsets;
+		return result.recordset;
 	},
 };
 

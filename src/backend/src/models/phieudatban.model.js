@@ -27,7 +27,7 @@ const PHIEUDATBAN = {
 		const pool = await database.poolPromise;
 		const result = await pool.request().input("MaKhachHang", MaKhachHang)
 			.query`SELECT * FROM PHIEUDATBAN JOIN PHIEUDATMON ON MaPhieuDatBan = MaPhieu WHERE MaKhachHang = @MaKhachHang`;
-		return result.recordsets;
+		return result.recordset;
 	},
 
 	create: async function (newPHIEUDATBAN) {

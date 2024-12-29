@@ -1,6 +1,3 @@
-const {
-	getMonsNotInThucDon,
-} = require("../controllers/thucdon_mon.controller");
 const database = require("../database/database");
 
 // CREATE TABLE [dbo].[THUCDON_MON](
@@ -83,7 +80,6 @@ const THUCDON_MON = {
 			.input("MaThucDon", MaThucDon)
 			.input("MaMon", MaMon)
 			.query`SELECT * FROM THUCDON_MON WHERE MaThucDon = @MaThucDon AND MaMon = @MaMon`;
-		console.log(result2);
 		return result2.recordset[0];
 	},
 
@@ -100,7 +96,7 @@ const THUCDON_MON = {
 	getMonsNotInThucDon: async function (MaThucDon) {
 		const pool = await database.poolPromise;
 		const result = await pool.request().input("MaThucDon", MaThucDon)
-			.query`SELECT * FROM MON JOIN WHERE MaMon NOT IN (SELECT MaMon FROM THUCDON_MON WHERE MaThucDon = @MaThucDon)`;
+			.query`SELECT * FROM MON WHERE MaMon NOT IN (SELECT MaMon FROM THUCDON_MON WHERE MaThucDon = @MaThucDon)`;
 		return result.recordset;
 	},
 };

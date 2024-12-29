@@ -29,6 +29,8 @@ const PHIEUDATMON = {
 			.query`INSERT INTO PHIEUDATMON (NgayLap, LoaiPhieu, MaChiNhanh, MaKhachHang) OUTPUT inserted.* VALUES (@NgayLap, @LoaiPhieu, @MaChiNhanh, @MaKhachHang)`;
 		return result.recordset[0];
 	},
+	createMany: async function (newPHIEUDATMON) {},
+
 	update: async function (id, newPHIEUDATMON) {
 		const pool = await database.poolPromise;
 		const result = await pool

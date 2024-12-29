@@ -24,7 +24,7 @@ const PHIEUDATMON = {
 		const pool = await database.poolPromise;
 		const result = await pool.request().input("MaKhachHang", MaKhachHang)
 			.query`SELECT * FROM PHIEUDATMON WHERE MaKhachHang = @MaKhachHang`;
-		return result.recordsets;
+		return result.recordset;
 	},
 
 	create: async function (newPHIEUDATMON) {
