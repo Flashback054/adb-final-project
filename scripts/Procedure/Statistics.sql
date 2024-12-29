@@ -136,7 +136,7 @@ BEGIN
         RETURN;
     END
 
-    SELECT 
+    SELECT TOP 10
         M.TenMon AS name,
         M.GiaHienTai AS price,
         SUM(PD.SoLuong) AS sold,
@@ -174,7 +174,7 @@ BEGIN
     END
 
     -- Query to calculate employee statistics (total orders, total revenue)
-    SELECT
+    SELECT TOP 10
         n.MaNhanVien AS employeeId, 
         n.HoTen AS employeeName,
         COUNT(pdm.MaPhieu) AS totalOrders,  -- Number of orders handled by the employee
@@ -187,7 +187,7 @@ BEGIN
     GROUP BY
         n.MaNhanVien, n.HoTen
     ORDER BY
-        totalRevenue DESC;  -- Optionally, order by total revenue for top performers
+        totalRevenue DESC;
 END;
 
 EXEC sp_GetEmployeeStatistics '10years'

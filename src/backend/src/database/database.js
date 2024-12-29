@@ -1,16 +1,19 @@
-const sql = require("mssql/msnodesqlv8");
+const sql = require("mssql");
 
 // Database configuration
 const dbConfig = {
-  user: "sa",
-  password: "123",
-  database: "SuShiX",
-  server: "localhost\\MSSQLSERVERNEW", // Tên instance (hoặc localhost nếu default)
-  driver: "msnodesqlv8",
-  options: {
-    trustServerCertificate: true,
-    // Không dùng trustedConnection khi dùng SQL Auth
-  },
+	user: "sa",
+	password: "@Flashback054",
+	server: "172.22.240.1", // e.g., 'localhost' or '127.0.0.1'
+	database: "SuShiX",
+	pool: {
+		max: 10,
+		min: 0,
+		idleTimeoutMillis: 30000,
+	},
+	options: {
+		trustServerCertificate: true, // Use if not using a CA-signed certificate
+	},
 };
 
 // Initialize a single connection pool
