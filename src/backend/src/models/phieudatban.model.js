@@ -30,6 +30,14 @@ const PHIEUDATBAN = {
 		return result.recordset;
 	},
 
+	getAllByMaChiNhanh: async function (MaChiNhanh, page, limit) {
+		const pool = await database.poolPromise;
+		console.log(MaChiNhanh, page, limit);
+		const result = await pool.request().input("MaChiNhanh", MaChiNhanh)
+			.query`SELECT * FROM PHIEUDATBAN JOIN PHIEUDATMON ON MaPhieuDatBan = MaPhieu WHERE MaChiNhanh = @MaChiNhanh ORDER BY NgayLap DESC OFFSET ${(page - 1) * limit} ROWS FETCH NEXT ${+limit} ROWS ONLY`;
+		return result.recordset;
+	},
+
 	create: async function (newPHIEUDATBAN) {
 		const pool = await database.poolPromise;
 		const result = await pool

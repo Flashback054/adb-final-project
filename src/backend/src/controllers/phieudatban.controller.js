@@ -29,6 +29,18 @@ exports.getAllByKhachHang = async function (req, res) {
 	});
 };
 
+exports.getAllByChiNhanh = async function (req, res) {
+	const { id } = req.params;
+	const page = req.query.page || 1;
+	const limit = req.query.limit || 30;
+
+	const results = await PHIEUDATBAN.getAllByMaChiNhanh(id, page, limit);
+	res.status(200).json({
+		status: "success",
+		data: results,
+	});
+};
+
 exports.create = async function (req, res) {
 	let {
 		MaChiNhanh,
