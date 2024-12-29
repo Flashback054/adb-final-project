@@ -6,6 +6,7 @@ const router = express.Router();
 
 router.get("/", phieuDatMonController.getAll);
 router.get("/:id", phieuDatMonController.getById);
+router.get("/datmon/khachhang/:id", phieuDatMonController.getAllByKhachHang);
 
 // router.post("/datmon", phieuDatMonController.create);
 

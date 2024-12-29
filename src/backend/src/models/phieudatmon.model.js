@@ -24,7 +24,7 @@ const PHIEUDATMON = {
 		const pool = await database.poolPromise;
 		const result = await pool.request().input("MaKhachHang", MaKhachHang)
 			.query`SELECT * FROM PHIEUDATMON WHERE MaKhachHang = @MaKhachHang`;
-		return result.recordset;
+		return result.recordsets;
 	},
 
 	create: async function (newPHIEUDATMON) {
@@ -57,3 +57,5 @@ const PHIEUDATMON = {
 		return result.rowsAffected;
 	},
 };
+
+module.exports = PHIEUDATMON;

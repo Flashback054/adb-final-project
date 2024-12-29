@@ -16,3 +16,12 @@ exports.getById = async function (req, res) {
 		data: result,
 	});
 };
+
+exports.getAllByKhachHang = async function (req, res) {
+	const { id } = req.params;
+	const results = await PHIEUDATMON.getAllByMaKhachHang(id);
+	res.status(200).json({
+		status: "success",
+		data: results,
+	});
+};

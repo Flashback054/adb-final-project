@@ -2,6 +2,7 @@ const jwt = require("jsonwebtoken");
 const { promisify } = require("util");
 const AppError = require("../utils/appError");
 const { createAccessToken, signToken } = require("../utils/generateToken");
+const database = require("../database/database");
 const bcrypt = require("bcryptjs");
 
 const KHACHHANG = require("../models/khachhang.model");
@@ -208,7 +209,6 @@ exports.protect = async (req, res, next) => {
 		// 2.1) Verify accessToken
 		try {
 			decoded = await verifyToken(accessToken, process.env.ACCESS_SECRET);
-			console.log({ decoded });
 		} catch (err) {
 			if (err instanceof jwt.TokenExpiredError) {
 				throw new AppError(
@@ -293,3 +293,21 @@ function isChangedPasswordAfter(passwordChangedAt, JWTTimestamp) {
 	// False: token was issued before password change time
 	return false;
 }
+
+exports.getMe = async (req, res, next) => {
+	let taiKhoan = req.taiKhoan;
+	if (taiKhoan.LoaiTaiKhoan === "KH") {
+		const data = await (await database.poolPromise).request().query(`
+      SELECT * FROM TAIKHOAN tk JOIN KHACHHANG kh ON tk.MaNguoiDung = kh.MaKhachHang WHERE tk.MaTaiKhoan = ${taiKhoan.MaTaiKhoan}`);
+		taiKhoan = data.recordset[0];
+	} else if (taiKhoan.LoaiTaiKhoan === "NV") {
+		const data = await (await database.poolPromise).request().query(`
+      SELECT * FROM TAIKHOAN tk JOIN NHANVIEN nv ON tk.MaNguoiDung = nv.MaNhanVien WHERE tk.MaTaiKhoan = ${taiKhoan.MaTaiKhoan}`);
+		taiKhoan = data.recordset[0];
+	}
+
+	res.status(200).json({
+		status: "success",
+		data: taiKhoan,
+	});
+};

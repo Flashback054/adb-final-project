@@ -1,6 +1,8 @@
 const PHIEUDATBAN = require("../models/phieudatban.model");
 const PHIEUDATMON = require("../models/phieudatmon.model");
 
+const convertJsDate = require("../utils/convertJsDate");
+
 exports.getAll = async function (req, res) {
 	const results = await PHIEUDATBAN.getAll();
 	res.status(200).json({
@@ -57,11 +59,11 @@ exports.create = async function (req, res) {
 
 	const phieuDatMonResult = await PHIEUDATMON.create(newPhieuDatMon);
 	const newPhieuDatBan = await PHIEUDATBAN.create({
-		MaPhieuDatMon: phieuDatMonResult.MaPhieu,
+		MaPhieuDatBan: phieuDatMonResult.MaPhieu,
 		SoBan,
 		SoLuongKhach,
 		NgayDat,
-		GioDen,
+		GioDen: GioDen ? convertJsDate.jsdateToSqlTime(GioDen) : null,
 		GhiChu,
 		LoaiPhieuDatBan,
 		MaNVDatBan,
@@ -77,6 +79,7 @@ exports.checkTaiKhoanDatBan = async function (req, res, next) {
 	const loaiTaiKhoan = req.taiKhoan.LoaiTaiKhoan;
 	if (loaiTaiKhoan === "KH") {
 		req.body.MaKhachHang = req.taiKhoan.MaNguoiDung;
+		req.query.MaKhachHang = req.taiKhoan.MaNguoiDung;
 		next();
 		return;
 	} else if (loaiTaiKhoan === "NV") {
