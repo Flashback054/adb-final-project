@@ -17,6 +17,8 @@ router.post("/signup/nhanvien", authController.signupNV);
 router.post("/login", validateRequest(loginSchema), authController.login);
 router.post("/logout", authController.logout);
 
+router.get("/me", authController.protect, authController.getMe);
+
 // router.use(authController.protect);
 // router.get("/me", userController.getMe, userController.getUser);
 // router.patch(
