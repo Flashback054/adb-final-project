@@ -8,6 +8,6 @@ router.get("/", phieuDatMonController.getAll);
 router.get("/:id", phieuDatMonController.getById);
 router.get("/khachhang/:id", phieuDatMonController.getAllByKhachHang);
 
-// router.post("/datmon", phieuDatMonController.create);
+router.post("/datmon", phieuDatMonController.datMon);
 
 module.exports = router;

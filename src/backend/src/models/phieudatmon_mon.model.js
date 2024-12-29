@@ -29,7 +29,16 @@ const PHIEUDATMON = {
 			.query`INSERT INTO PHIEUDATMON (NgayLap, LoaiPhieu, MaChiNhanh, MaKhachHang) OUTPUT inserted.* VALUES (@NgayLap, @LoaiPhieu, @MaChiNhanh, @MaKhachHang)`;
 		return result.recordset[0];
 	},
-	createMany: async function (newPHIEUDATMON) {},
+	createMany: async function (newPhieuDatMon_Mons) {
+		const pool = await database.poolPromise;
+		const values = newPhieuDatMon_Mons.map((phieuDatMon_Mon) => {
+			return `(${phieuDatMon_Mon.MaPhieu}, ${phieuDatMon_Mon.MaMon}, ${phieuDatMon_Mon.SoLuong}, ${phieuDatMon_Mon.Gia})`;
+		});
+
+		const query = `INSERT INTO PHIEUDATMON_MON (MaPhieu, MaMon, SoLuong, Gia) OUTPUT inserted.* VALUES ${values.join(",")}`;
+		const result = await pool.request().query(query);
+		return result.recordset;
+	},
 
 	update: async function (id, newPHIEUDATMON) {
 		const pool = await database.poolPromise;
