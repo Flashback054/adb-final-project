@@ -10,19 +10,15 @@ const Statistic = {
 
 	getDishStatistic: async function (period) {
 		const pool = await database.poolPromise;
-		const result = await pool
-			.request()
-			.input("period", period)
-			.execute("sp_GetDishStatistics");
+		const result = await pool.request().input("period", period)
+			.query`EXEC sp_GetDishStatistics @period = ${period}`;
 		return result.recordset;
 	},
 
 	getEmployeeStatistic: async function (period) {
 		const pool = await database.poolPromise;
-		const result = await pool
-			.request()
-			.input("period", period)
-			.execute("sp_GetEmployeeStatistics");
+		const result = await pool.request().input("period", period)
+			.query`EXEC sp_GetEmployeeStatistics @period = ${period}`;
 		return result.recordset;
 	},
 };
