@@ -10,13 +10,13 @@ const THUCDON_MON = {
   getAll: async function () {
     const pool = await database.poolPromise;
     const result = await pool.request()
-      .query`SELECT MaThucDon, MON.* FROM THUCDON_MON JOIN MON ON THUCDON_MON.MaMon = MON.MaMon`;
+      .query`SELECT tdm.MaThucDon, tdm.CoGiaoHangKhong, tdm.CoPhucVuKhong, MON.* FROM THUCDON_MON tdm JOIN MON ON THUCDON_MON.MaMon = MON.MaMon`;
     return result.recordset;
   },
   getAllByMaThucDon: async function (MaThucDon) {
     const pool = await database.poolPromise;
     const result = await pool.request().input("MaThucDon", MaThucDon)
-      .query`SELECT MaThucDon, MON.* FROM THUCDON_MON JOIN MON ON THUCDON_MON.MaMon = MON.MaMon WHERE MaThucDon = @MaThucDon`;
+      .query`SELECT tdm.MaThucDon, tdm.CoGiaoHangKhong, tdm.CoPhucVuKhong, MON.* FROM THUCDON_MON tdm JOIN MON ON tdm.MaMon = MON.MaMon WHERE MaThucDon = @MaThucDon`;
     return result.recordset;
   },
   getById: async function (MaThucDon, MaMon) {
