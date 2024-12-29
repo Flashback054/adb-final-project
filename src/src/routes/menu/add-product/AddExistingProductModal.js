@@ -16,14 +16,14 @@ const AddExistingProductModal = ({
         <h2>Select Products to Add</h2>
         <ul>
           {allProducts.map((product) => (
-            <li key={product.id} className="product-item">
+            <li key={product.MaMon} className="product-item">
               <div className="product-item__info">
                 <img
-                  src={product.ItemImg}
-                  alt={product.name}
+                  src={`/assets/mon/${product.HinhAnh}`}
+                  alt={product.TenMon}
                   style={{ width: "100px", height: "auto" }}
                 />
-                <span>{product.ItemName}</span>
+                <span>{product.TenMon}</span>
               </div>
               <button
                 onClick={() => handleAddExistingProduct(product)}

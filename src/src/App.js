@@ -36,6 +36,7 @@ import DishesStatistic from "./routes/statistic/dishes/dishes.js";
 import Customers from "./routes/statistic/customer/customers.js";
 import Branch from "./routes/branch/branch.js";
 import Review from "./routes/review/review.js";
+import OrderList from "./routes/order-list/order-list.js";
 
 function App() {
   const [allCategories, setAllCategories] = useState([]);
@@ -58,67 +59,72 @@ function App() {
     console.log("WebSocket created with args:", args);
     return new OriginalWebSocket(...args);
   };
-  const getUser = async (id) => {
-    try {
-      const response = await fetch(`${process.env.REACT_APP_USERS_URL}/${id}`);
-      const body = await response.json();
-      setCurrentUser(body.data[0]);
-      const jsonUser = JSON.stringify(body.data[0]);
-      sessionStorage.setItem("currentUser", jsonUser);
-      if (response.status === 200) {
-        return true;
-      }
-    } catch (err) {
-      console.log(err.message);
-      return false;
-    }
-  };
+  // const getUser = async (id) => {
+  //   try {
+  //     const response = await fetch(`${process.env.REACT_APP_USERS_URL}/${id}`);
+  //     const body = await response.json();
+  //     setCurrentUser(body.data[0]);
+  //     const jsonUser = JSON.stringify(body.data[0]);
+  //     sessionStorage.setItem("currentUser", jsonUser);
+  //     if (response.status === 200) {
+  //       return true;
+  //     }
+  //   } catch (err) {
+  //     console.log(err.message);
+  //     return false;
+  //   }
+  // };
 
-  const updateUser = async (id, user) => {
+  // const updateUser = async (id, user) => {
+  //   try {
+  //     const response = await fetch(`${process.env.REACT_APP_USERS_URL}/${id}`, {
+  //       method: "PUT",
+  //       headers: {
+  //         "Content-Type": "application/json",
+  //       },
+  //       body: JSON.stringify(user),
+  //     });
+
+  //     if (response.status === 200) {
+  //       const update = await getUser(id);
+  //       if (update) {
+  //         return true;
+  //       }
+  //       return true;
+  //     } else {
+  //       console.log("Update failed with status:", response.status);
+  //       return false;
+  //     }
+  //   } catch (err) {
+  //     console.log("Fetch error:", err.message);
+  //     return false;
+  //   }
+  // };
+
+  const getUser = async (token) => {
     try {
-      const response = await fetch(`${process.env.REACT_APP_USERS_URL}/${id}`, {
-        method: "PUT",
+      const response = await fetch("http://localhost:8081/api/v1/auth/me", {
+        method: "GET",
         headers: {
           "Content-Type": "application/json",
+          Authorization: `Bearer ${token}`,
         },
-        body: JSON.stringify(user),
       });
 
-      if (response.status === 200) {
-        const update = await getUser(id);
-        if (update) {
-          return true;
-        }
-        return true;
-      } else {
-        console.log("Update failed with status:", response.status);
-        return false;
+      if (response.ok) {
+        const data = await response.json();
+        setCurrentUser(data.data);
+        const jsonUser = JSON.stringify(data.data);
+        sessionStorage.setItem("currentUser", jsonUser);
       }
-    } catch (err) {
-      console.log("Fetch error:", err.message);
-      return false;
+    } catch (error) {
+      console.log(error);
+      throw new Error(`Failed to get user profile, ${error.message}`);
     }
   };
 
   useEffect(() => {
-    // Mocking user data
-    const currentUser = {
-      MaTaiKhoan: 1,
-      TenDangNhap: "user123",
-      MatKhau: "hashedPassword123",
-      LoaiTaiKhoan: "NV",
-      MaNguoiDung: 1,
-      Hoten: "Nguyễn Văn A",
-      SDT: "0123456789",
-      Email: "nguyenvanA@gmail.com",
-      Diachi: "123 Đường ABC, Quận XYZ, TP HCM",
-    };
-
-    sessionStorage.setItem("currentUser", JSON.stringify(currentUser));
-    if (sessionStorage.getItem("currentUser") !== null) {
-      const user = JSON.parse(sessionStorage.getItem("currentUser"));
-      setCurrentUser(user);
-    }
+    getUser(localStorage.getItem("accessToken"));
   }, []);
 
   useEffect(() => {
@@ -196,7 +202,9 @@ function App() {
     userSelectedAttributes
   ) => {
     let item;
-    let productsById = cartItems.filter((item) => item.id === targetProduct.id);
+    let productsById = cartItems.filter(
+      (item) => item.MaMon === targetProduct.MaMon
+    );
     productsById.forEach((targetItem) => {
       if (MatchingAttributes(userSelectedAttributes, targetItem)) {
         item = targetItem;
@@ -278,7 +286,9 @@ function App() {
       let index;
       //if there are no attributes find index by id
       if (userSelectedAttributes.length === 0) {
-        index = cartItems.findIndex((item) => item.id === targetProduct.id);
+        index = cartItems.findIndex(
+          (item) => item.MaMon === targetProduct.MaMon
+        );
       }
 
       //if there are attributes find index by attributes and id at the same time
@@ -287,7 +297,7 @@ function App() {
           (item) =>
             item.userSelectedAttributes[0]?.attributeValue ===
               userSelectedAttributes[0].attributeValue &&
-            item.id === targetProduct.id
+            item.MaMon === targetProduct.MaMon
         );
       }
       if (index !== -1) {
@@ -393,11 +403,11 @@ function App() {
 
   const getTotalPrice = (cartItems) => {
     let total = cartItems.reduce((prevState, currentItem) => {
-      const singleItemQuantity = currentItem.ItemPrice * currentItem.quantity;
+      const singleItemQuantity = currentItem.GiaHienTai * currentItem.quantity;
       return prevState + singleItemQuantity;
     }, 0);
-    setTotalPayment(total.toFixed(2));
-    setTaxes(((total * 10) / 100).toFixed(2));
+    setTotalPayment(total);
+    setTaxes((total * 10) / 100);
   };
 
   const successMsg = () => {
@@ -472,7 +482,6 @@ function App() {
             setLoginModalWindow={setLoginModalWindow}
             loginModalWindow={loginModalWindow}
             hideMenu={hideMenu}
-            getUser={getUser}
             setCurrentUser={setCurrentUser}
           />
         }
@@ -565,12 +574,7 @@ function App() {
             !validLogin ? (
               <NotFound />
             ) : (
-              <Profile
-                currentUser={currentUser}
-                getUser={getUser}
-                handleLogout={handleLogout}
-                updateUser={updateUser}
-              />
+              <Profile currentUser={currentUser} handleLogout={handleLogout} />
             )
           }
         />
@@ -643,6 +647,9 @@ function App() {
         )}
         {currentUser.LoaiTaiKhoan !== "KH" && (
           <Route path="/statistics/customers" element={<Customers />} />
+        )}
+        {currentUser.LoaiTaiKhoan !== "KH" && (
+          <Route path="/order-list" element={<OrderList />} />
         )}
         <Route path="/careers" element={<Careers />} />
         <Route path="*" element={<NotFound />} />

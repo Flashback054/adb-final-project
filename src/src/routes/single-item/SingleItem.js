@@ -26,15 +26,29 @@ const SingleItem = ({ handleAddProduct, handleRemoveProduct }) => {
       }
     });
   };
-
+  const callAPIGetMon = async (maMo) => {
+    try {
+      const response = await fetch("http://localhost:8081/api/v1/mon/" + maMo, {
+        method: "GET",
+        headers: {
+          "Content-Type": "application/json",
+        },
+      });
+      if (!response.ok) {
+        throw new Error(`HTTP error! status: ${response.status}`);
+      }
+      const data = await response.json();
+      setSingleProduct(data.data);
+    } catch (error) {
+      console.log("callAPIGetMon error:", error.message);
+      throw error;
+    }
+  };
   useEffect(() => {
-    document.title = `${singleProduct.ItemName}| Pizza Time`;
-    setSingleProduct(
-      allProductsData.filter(
-        (item) => item.id === window.location.pathname.toString().substring(6)
-      )[0]
-    );
-  }, [singleProduct.ItemName]);
+    callAPIGetMon(window.location.pathname.toString().substring(6));
+
+    document.title = `${singleProduct.TenMon}| Pizza Time`;
+  }, [singleProduct.TenMon]);
 
   return (
     <main className="single-item">
@@ -42,25 +56,28 @@ const SingleItem = ({ handleAddProduct, handleRemoveProduct }) => {
         ← Back
       </Link>
       <article className="single-item__inner flex-container flex-column txt-white">
-        <img src={singleProduct?.ItemImg} alt={`${singleProduct?.ItemName}`} />
+        <img
+          src={`/assets/mon/${singleProduct?.HinhAnh}`}
+          alt={`${singleProduct?.TenMon}`}
+        />
         <section className="single-item__info">
           <section className="single-item__title">
-            <h2>{singleProduct?.ItemName}</h2>
-            <p>{singleProduct?.ItemIngredients}</p>
+            <h2>{singleProduct?.TenMon}</h2>
+            <p>{singleProduct?.MoTa}</p>
           </section>
           <section className="single-item__pricing">
             <p className="single-item__pricing-curr">
               <span>$</span>
-              {singleProduct.ItemPrice}
+              {singleProduct.GiaHienTai}
             </p>
-            <AddToCartButton
+            {/* <AddToCartButton
               handleAddProduct={handleAddProduct}
               handleRemoveProduct={handleRemoveProduct}
               singleProduct={singleProduct}
               selectedAttributes={selectedAttributes}
               targetAttribute={targetAttribute}
               setTargetAttribute={setTargetAttribute}
-            />
+            /> */}
           </section>
         </section>
       </article>

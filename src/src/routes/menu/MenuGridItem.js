@@ -53,16 +53,19 @@ const MenuGridItem = ({
 
       <Link
         onClick={ResetLocation}
-        to={`/menu/${singleProduct.id}`}
+        to={`/menu/${singleProduct.MaMon}`}
         className="menu-item__link"
       >
-        <img src={singleProduct.ItemImg} alt={`${singleProduct.ItemName}`} />
+        <img
+          src={`/assets/mon/${singleProduct.HinhAnh}`}
+          alt={`${singleProduct.TenMon}`}
+        />
       </Link>
-      <h3>{singleProduct.ItemName}</h3>
+      <h3>{singleProduct.TenMon}</h3>
       <div className="menu-item__pricing">
         <p className="menu-item__pricing-curr">
           <span>$</span>
-          {singleProduct.ItemPrice}
+          {singleProduct.GiaHienTai}
         </p>
         <AddToCartButton
           handleAddProduct={handleAddProduct}

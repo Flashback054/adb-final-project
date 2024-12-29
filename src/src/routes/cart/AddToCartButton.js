@@ -7,6 +7,7 @@ const AddToCartButton = ({
   targetAttribute,
   setTargetAttribute,
 }) => {
+  console.log("singleProduct.CoPhucVuKhong", singleProduct.CoPhucVuKhong);
   return (
     <button
       onClick={() => {
@@ -14,19 +15,11 @@ const AddToCartButton = ({
         setTargetAttribute(false);
       }}
       className={`passive-button-style ${
-        (targetAttribute?.length > 0 ||
-          singleProduct?.attributes?.length === 0) &&
-        singleProduct.isStock
+        singleProduct.CoPhucVuKhong
           ? "active-add-to-cart"
           : "inactive-add-to-cart"
       }`}
-      disabled={
-        (targetAttribute?.length > 0 ||
-          singleProduct?.attributes?.length === 0) &&
-        singleProduct.isStock
-          ? false
-          : true
-      }
+      disabled={singleProduct.CoPhucVuKhong ? false : true}
     >
       Add to cart
     </button>

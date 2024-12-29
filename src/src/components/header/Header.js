@@ -149,7 +149,7 @@ const Header = ({
               Order
             </NavLink>
           </li>
-          <li>
+          {/* <li>
             <NavLink
               onClick={() => {
                 ResetLocation();
@@ -168,7 +168,7 @@ const Header = ({
             >
               Branch
             </NavLink>
-          </li>
+          </li> */}
           <li>
             <NavLink
               onClick={() => {
@@ -208,6 +208,28 @@ const Header = ({
                 to="/statistics"
               >
                 Statistics
+              </NavLink>
+            </li>
+          )}
+          {currentUser.LoaiTaiKhoan !== "KH" && (
+            <li>
+              <NavLink
+                onClick={() => {
+                  ResetLocation();
+                  hideMenu();
+                }}
+                style={({ isActive }) =>
+                  isActive
+                    ? {
+                        textDecoration: "none",
+                        color: "#ff6240",
+                      }
+                    : {}
+                }
+                className="txt-white"
+                to="/order-list"
+              >
+                Order List
               </NavLink>
             </li>
           )}

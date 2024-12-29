@@ -6,6 +6,7 @@ import { useState } from "react";
 import "./tableOrder.css";
 import ResetLocation from "../../helpers/ResetLocation";
 import { useNavigate } from "react-router-dom";
+import { toast } from "react-toastify";
 
 const TableOrder = ({
   currentUser,
@@ -23,7 +24,8 @@ const TableOrder = ({
     NgayDat: "",
     GioDen: "",
     GhiChu: "",
-    delivery: "",
+    MaNVDatBan: null,
+    DiaChiGiaoHang: "",
   });
 
   const [formError, setFormError] = useState({});
@@ -54,6 +56,7 @@ const TableOrder = ({
 
   useEffect(() => {
     document.title = "Table Order | Sushi Time";
+    console.log("cartitems: ", cartItems);
   }, []);
 
   const handleValidation = (e) => {
@@ -83,6 +86,18 @@ const TableOrder = ({
     }
     return errors;
   };
+  const isoToTime = (isoString) => {
+    const date = new Date(isoString);
+    const hours = date.getHours().toString().padStart(2, "0");
+    const minutes = date.getMinutes().toString().padStart(2, "0");
+    return `${hours}:${minutes}`;
+  };
+  const timeToIso = (timeString, date = new Date()) => {
+    const [hours, minutes] = timeString.split(":"); // Tách giờ và phút
+    date.setHours(hours, minutes, 0, 0); // Đặt giờ, phút
+    return date.toISOString(); // Chuyển đổi thành ISO
+  };
+
   const resetForm = () => {
     setSubmit(false);
     setFormValue({
@@ -98,11 +113,61 @@ const TableOrder = ({
   };
   // API will be called here
   const createTableOrder = async (formValue) => {
-    return new Promise((resolve) =>
-      setTimeout(() => {
-        resolve(true);
-      }, 2000)
-    );
+    try {
+      const response = await fetch(
+        "http://localhost:8081/api/v1/phieudatban/datban",
+        {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: `Bearer ${localStorage.getItem("accessToken")}`,
+          },
+          body: JSON.stringify({
+            ...formValue,
+            MaKhachHang: currentUser.MaKhachHang,
+            LoaiPhieuDatBan: "TT",
+            LoaiPhieu: "DB",
+          }),
+        }
+      );
+      if (!response.ok) {
+        throw new Error("Failed to create table order");
+      }
+      if (cartItems.length > 0) {
+        const data = await response.json();
+        const MaPhieu = data.data.MaPhieuDatBan;
+        const response2 = await fetch(
+          `http://localhost:8081/api/v1/phieudatmon/datmon`,
+          {
+            method: "POST",
+            headers: {
+              "Content-Type": "application/json",
+              Authorization: `Bearer ${localStorage.getItem("accessToken")}`,
+            },
+            body: JSON.stringify({
+              MaPhieu: MaPhieu,
+              Mon: cartItems.map((item) => ({
+                MaMon: item.MaMon,
+                SoLuong: item.quantity,
+                Gia: item.GiaHienTai,
+              })),
+            }),
+          }
+        );
+
+        if (!response2.ok) {
+          throw new Error("Failed to create order details");
+        }
+      }
+
+      toast.success("Table order created successfully");
+      return true;
+    } catch (error) {
+      toast.error("Failed to create table order:", error);
+      console.error("Error creating table order:", error);
+      alert("An error occurred while creating the table order.");
+      return false;
+    }
   };
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -262,8 +327,14 @@ const TableOrder = ({
                   type="time"
                   id="GioDen"
                   name="GioDen"
-                  value={formValue.GioDen}
-                  onChange={handleValidation}
+                  value={formValue.GioDen ? isoToTime(formValue.GioDen) : ""} // Hiển thị giá trị HH:mm
+                  onChange={(e) => {
+                    const timeValue = e.target.value; // Lấy giá trị HH:mm từ input
+                    const isoValue = timeToIso(timeValue); // Chuyển sang ISO
+                    handleValidation({
+                      target: { name: "GioDen", value: isoValue },
+                    }); // Cập nhật formValue
+                  }}
                 />
                 {formError.GioDen && (
                   <span className="error">{formError.GioDen}</span>

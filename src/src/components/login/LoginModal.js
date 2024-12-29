@@ -27,6 +27,10 @@ const LoginModal = ({
         "http://localhost:8081/api/v1" + "/auth/login",
         {
           method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify(payload),
         }
       );
       if (!response.ok) {

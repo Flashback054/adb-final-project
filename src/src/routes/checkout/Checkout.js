@@ -28,7 +28,7 @@ const Checkout = ({
               <section className="checkout__totals">
                 <section className="checkout__totals__content">
                   <h4>Tax 10%:</h4>
-                  <p>$ {taxes}</p>
+                  <p>{taxes} VNĐ</p>
                 </section>
                 <section className="checkout__totals__content">
                   <h4>Quantity:</h4>
@@ -36,7 +36,7 @@ const Checkout = ({
                 </section>
                 <section className="checkout__totals__content">
                   <h4>Total:</h4>
-                  <p>$ {totalPayment}</p>
+                  <p>{totalPayment} VNĐ</p>
                 </section>
               </section>
             )}
@@ -46,7 +46,8 @@ const Checkout = ({
             productsQuantity={productsQuantity}
             totalPayment={totalPayment}
             taxes={taxes}
-            delivery={true}
+            delivery={false}
+            cartItems={cartItems}
           />
         </>
       )}

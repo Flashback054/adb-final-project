@@ -9,6 +9,7 @@ import { motion } from "framer-motion";
 import "./menu.css";
 import AddNewProductModal from "./AddNewProductModal";
 import AddExistingProductModal from "./add-product/AddExistingProductModal";
+import { toast } from "react-toastify";
 
 const Menu = ({
   allProducts,
@@ -21,22 +22,27 @@ const Menu = ({
   handleAddNewProduct,
   handleUpdateProductStatus,
 }) => {
+  const [allMonThucDon, setAllMonThucDon] = useState([]);
+  const [allExistingMon, setAllExistingMon] = useState([]);
   const [itemOffset, setItemOffset] = useState(0);
   const [endOffset, setEndOffset] = useState(itemOffset + 5);
   const [currentProducts, setcurrentProducts] = useState(
-    [...allProducts].reverse().slice(itemOffset, endOffset)
+    [...allMonThucDon].reverse().slice(itemOffset, endOffset)
   );
   const [pageCountProducts, setpageCountProducts] = useState(
-    Math.ceil(allProducts.length / 5)
+    Math.ceil(allMonThucDon.length / 5)
   );
   const [addNewProductModalWindow, setAddNewProductModalWindow] =
     useState(false);
   const [addExistingProductModalWindow, setAddExistingProductModalWindow] =
     useState(false);
+
+  const user = JSON.parse(sessionStorage.getItem("currentUser"));
+  console.log("usser" + user);
+
   const userRole = JSON.parse(
     sessionStorage.getItem("currentUser")
   ).LoaiTaiKhoan;
-  console.log("userRole" + userRole);
 
   const activateAddNewProductModal = () => {
     setAddNewProductModalWindow(!addNewProductModalWindow);
@@ -46,61 +52,96 @@ const Menu = ({
   };
 
   const handlePageClick = (event) => {
-    const newOffset = (event.selected * 5) % allProducts.length;
+    const newOffset = (event.selected * 5) % allMonThucDon.length;
     setItemOffset(newOffset);
     ResetLocation();
   };
   const handleAddExistingProduct = async (product) => {
-    // Kiểm tra xem sản phẩm đã có trong currentProducts chưa
-    const isProductAlreadyInMenu = currentProducts.some(
-      (item) => item.id === product.id
-    );
-    console.log(isProductAlreadyInMenu);
-    if (isProductAlreadyInMenu) {
-      alert("This product is already in the menu.");
-      return;
+    // Gọi API để thêm sản phẩm vào menu
+    try {
+      const response = await fetch("http://localhost:8081/api/v1/thucdon", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({ MaThucDon: 1, MaMon: product.MaMon }),
+      });
+
+      if (!response.ok) {
+        throw new Error("Failed to add product to menu");
+      }
+
+      toast.success("Product added to menu successfully");
+
+      getThucDonMon();
+      // Đóng modal sau khi thêm sản phẩm
+      setAddExistingProductModalWindow(false);
+    } catch (error) {
+      console.error("Error adding product to menu:", error);
+      alert("An error occurred while adding the product.");
     }
-
-    // // Gọi API để thêm sản phẩm vào menu
-    // try {
-    //   const response = await fetch("/api/add-product-to-menu", {
-    //     method: "POST",
-    //     headers: {
-    //       "Content-Type": "application/json",
-    //     },
-    //     body: JSON.stringify({ productId: product.id }),
-    //   });
-
-    //   if (!response.ok) {
-    //     throw new Error("Failed to add product to menu");
-    //   }
-
-    //   const updatedProduct = await response.json();
-
-    //   // Sau khi API thêm sản phẩm thành công, cập nhật currentProducts
-    //   setcurrentProducts((prevProducts) => {
-    //     // Thêm sản phẩm mới vào đầu danh sách (hoặc có thể thêm vào cuối tùy nhu cầu)
-    //     return [updatedProduct, ...prevProducts];
-    //   });
-
-    //   // Đóng modal sau khi thêm sản phẩm
-    //   setAddExistingProductModalWindow(false);
-    // } catch (error) {
-    //   console.error("Error adding product to menu:", error);
-    //   alert("An error occurred while adding the product.");
-    // }
   };
 
   const resetPagination = () => {
     setItemOffset(0);
     setEndOffset(5);
   };
+  const getThucDonMon = async () => {
+    try {
+      const response = await fetch("http://localhost:8081/api/v1/thucdon/1", {
+        method: "GET",
+        headers: {
+          "Content-Type": "application/json",
+          Bearer: localStorage.getItem("accessToken"),
+        },
+      });
+
+      if (!response.ok) {
+        throw new Error("Failed to get menu items");
+      }
+      const data = await response.json();
+      setAllMonThucDon(data.data);
+    } catch (error) {
+      console.log(error);
+      throw new Error(`Failed to get menu items, ${error.message}`);
+    }
+  };
+  const getExistingMon = async () => {
+    try {
+      const response = await fetch(
+        "http://localhost:8081/api/v1/thucdon/1?exclude=true",
+        {
+          method: "GET",
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: `Bearer ${localStorage.getItem("accessToken")}`,
+          },
+        }
+      );
+
+      if (!response.ok) {
+        throw new Error("Failed to get menu items");
+      }
+      const data = await response.json();
+      setAllExistingMon(data.data);
+    } catch (error) {
+      console.log(error);
+      throw new Error(`Failed to get menu items, ${error.message}`);
+    }
+  };
+  useEffect(() => {
+    getExistingMon();
+    getThucDonMon();
+  }, []);
+
   useEffect(() => {
     document.title = `${activeCategory} | Pizza Time`;
     setEndOffset(itemOffset + 5);
-    setcurrentProducts([...allProducts].reverse().slice(itemOffset, endOffset));
-    setpageCountProducts(Math.ceil(allProducts.length / 5));
-  }, [allProducts, setEndOffset, endOffset, itemOffset, activeCategory]);
+    setcurrentProducts(
+      [...allMonThucDon].reverse().slice(itemOffset, endOffset)
+    );
+    setpageCountProducts(Math.ceil(allMonThucDon.length / 5));
+  }, [allMonThucDon, setEndOffset, endOffset, itemOffset, activeCategory]);
   return (
     <motion.main
       className="menu"
@@ -122,7 +163,7 @@ const Menu = ({
         ) : (
           currentProducts.map((singleProduct) => (
             <MenuGridItem
-              key={singleProduct.id}
+              key={singleProduct.MaMon}
               singleProduct={singleProduct}
               handleAddProduct={handleAddProduct}
               handleRemoveProduct={handleRemoveProduct}
@@ -144,7 +185,7 @@ const Menu = ({
               setAddExistingProductModalWindow={
                 setAddExistingProductModalWindow
               }
-              allProducts={allProducts} // Truyền allProducts vào modal
+              allProducts={allExistingMon} // Truyền allMonThucDon vào modal
               handleAddExistingProduct={handleAddExistingProduct} // Hàm xử lý thêm sản phẩm vào menu
             />
           </>
