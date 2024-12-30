@@ -1,0 +1,51 @@
+/* Container styling */
+.order-list__container {
+  width: 90%;
+  margin: 2rem auto;
+  padding: 1rem;
+  background-color: transparent;
+  border-radius: 8px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+/* Title styling */
+.order-list__title {
+  font-size: 1.8rem;
+  font-weight: 600;
+  text-align: center;
+  color: #6a2eb9;
+  margin-bottom: 1rem;
+}
+
+/* Table styling */
+.order-list__table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 1rem;
+}
+
+.order-list__table th,
+.order-list__table td {
+  padding: 0.8rem 1rem;
+  text-align: left;
+  border: 1px solid #ddd;
+}
+
+.order-list__table th {
+  background-color: #007bff;
+  color: white;
+  text-transform: uppercase;
+}
+
+.order-list__table tr:hover {
+  background-color: #c9c9c9c9;
+}
+
+/* Loading and error messages */
+.order-list__loading,
+.order-list__error {
+  text-align: center;
+  font-size: 1.2rem;
+  color: #ff4d4f;
+  padding: 2rem;
+}

@@ -1,0 +1,82 @@
+/* statistics.css */
+.statistics__hero {
+  position: relative;
+  width: 100%;
+  height: 100vh;
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-direction: column;
+}
+
+.statistics__background {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-size: cover;
+  background-position: center;
+  filter: blur(5px); /* Làm mờ background */
+  z-index: 1; /* Phía sau nội dung */
+}
+
+.statistics__overlay.loaded {
+  opacity: 0;
+}
+
+.statistics_info {
+  position: absolute;
+  z-index: 99;
+  justify-content: center;
+  gap: 1.5rem;
+  align-items: center;
+  overflow-x: hidden;
+  padding: 1rem;
+}
+
+.txt-white {
+  color: white;
+}
+
+.stat-button-style {
+  padding: 10px 20px;
+  margin: 10px;
+  background-color: var(--yellow);
+  color: black;
+  border-radius: 5px;
+  border: 1px solid transparent;
+  text-decoration: none;
+  transition: background-color 0.3s ease;
+}
+
+.stat-button-style:hover {
+  background-color: rgba(244, 166, 65, 0.7);
+}
+
+.statistics__hero span {
+  color: var(--pizza-red);
+  font-family: var(--nothing-font);
+  font-size: 2rem;
+}
+
+.statistics_info h1 {
+  text-transform: uppercase;
+  font-size: 3rem;
+  line-height: 3rem;
+  color: var(--white);
+}
+
+.statistics_info p {
+  font-size: 1rem;
+  color: var(--white);
+}
+
+.statistics__interaction {
+  display: flex;
+  justify-content: center;
+  gap: 1rem;
+}
